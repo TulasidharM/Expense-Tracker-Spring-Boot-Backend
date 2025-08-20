@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> loginUser() {
@@ -23,8 +23,9 @@ public class AuthController {
 						        .map(GrantedAuthority::getAuthority)
 						        .collect(Collectors.joining(", "));
 		var res = new HashMap<String,String>();
-		res.put("role","ROLE_ADMIN");
+		res.put("role",roles);
 		return  ResponseEntity.ok(res);
 	}
+	
+	
 }
-
