@@ -15,6 +15,7 @@ public interface ExpenseDAO {
     int updateStatus(Integer id, String status, String remarks, Integer managerId);
     List<Expense> findAll(String status);
     List<Category> findAllCategories();
+    String getUserRoleById(Integer userId);
     Integer getManagerIdByEmployeeId(Integer employeeId);
     List<Expense> findByStatus(String status);
     List<Expense> findByDateRange(Integer employeeId, String startDate, String endDate);

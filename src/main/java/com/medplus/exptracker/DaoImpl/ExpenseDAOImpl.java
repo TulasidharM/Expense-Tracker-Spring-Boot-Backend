@@ -95,7 +95,11 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.query(getcate, new BeanPropertyRowMapper<>(Category.class));
     }
 
-   
+    @Override
+    public String getUserRoleById(Integer userId) {
+        String getrolebyid = "SELECT r.name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
+        return jdbcTemplate.queryForObject(getrolebyid, String.class, userId);
+    }
 
     @Override
     public Integer getManagerIdByEmployeeId(Integer employeeId) {

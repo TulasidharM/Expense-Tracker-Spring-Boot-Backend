@@ -41,14 +41,14 @@ public class ExpenseController {
         return ResponseEntity.ok(expenses);
     }
 
-    @GetMapping("/manager/{managerId}")
-    public ResponseEntity<List<Expense>> getTeamExpenses(
-            @PathVariable Integer managerId,
-            @RequestParam(required = false) String status
-    ) {
-        List<Expense> expenses = expenseService.getTeamExpenses(managerId, status);
-        return ResponseEntity.ok(expenses);
-    }
+//    @GetMapping("/manager/{managerId}")
+//    public ResponseEntity<List<Expense>> getTeamExpenses(
+//            @PathVariable Integer managerId,
+//            @RequestParam(required = false) String status
+//    ) {
+//        List<Expense> expenses = expenseService.getTeamExpenses(managerId, status);
+//        return ResponseEntity.ok(expenses);
+//    }
 
     @GetMapping
     public ResponseEntity<List<Expense>> getAllExpenses(

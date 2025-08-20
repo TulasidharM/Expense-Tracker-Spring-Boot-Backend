@@ -63,10 +63,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
     }
 
-    @Override
-    public List<Expense> getTeamExpenses(Integer managerId, String status) {
-        return expenseDAO.findByManagerId(managerId, status);
-    }
+//    @Override
+//    public List<Expense> getTeamExpenses(Integer managerId, String status) {
+//        return expenseDAO.findByManagerId(managerId, status);
+//    }
 
     @Override
     public void approveExpense(Integer id, String remarks, Integer managerId) {
@@ -95,15 +95,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
 
-    @Override
-    public boolean validateExpenseOwnership(Integer expenseId, Integer employeeId) {
-        return expenseDAO.existsByIdAndEmployeeId(expenseId, employeeId);
-    }
-
-    @Override
-    public boolean validateManagerAccess(Integer expenseId, Integer managerId) {
-        return expenseDAO.existsByIdAndManagerId(expenseId, managerId);
-    }
+//    @Override
+//    public boolean validateExpenseOwnership(Integer expenseId, Integer employeeId) {
+//        return expenseDAO.existsByIdAndEmployeeId(expenseId, employeeId);
+//    }
+//
+//    @Override
+//    public boolean validateManagerAccess(Integer expenseId, Integer managerId) {
+//        return expenseDAO.existsByIdAndManagerId(expenseId, managerId);
+//    }
 
     @Override
     public List<Expense> getExpensesByStatus(String status) {
@@ -115,20 +115,20 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseDAO.findByDateRange(employeeId, startDate, endDate);
     }
 
-    @Override
-    public Long getExpenseCountByEmployee(Integer employeeId) {
-        return expenseDAO.countExpensesByEmployeeId(employeeId);
-    }
-
-    @Override
-    public Long getPendingExpenseCountByManager(Integer managerId) {
-        return expenseDAO.countPendingExpensesByManagerId(managerId);
-    }
-
-    @Override
-    public Double getTotalExpenseAmountByEmployee(Integer employeeId) {
-        return expenseDAO.sumExpenseAmountsByEmployeeId(employeeId);
-    }
+//    @Override
+//    public Long getExpenseCountByEmployee(Integer employeeId) {
+//        return expenseDAO.countExpensesByEmployeeId(employeeId);
+//    }
+//
+//    @Override
+//    public Long getPendingExpenseCountByManager(Integer managerId) {
+//        return expenseDAO.countPendingExpensesByManagerId(managerId);
+//    }
+//
+//    @Override
+//    public Double getTotalExpenseAmountByEmployee(Integer employeeId) {
+//        return expenseDAO.sumExpenseAmountsByEmployeeId(employeeId);
+//    }
 
     @Override
     public Double getTotalApprovedAmountByManager(Integer managerId) {
