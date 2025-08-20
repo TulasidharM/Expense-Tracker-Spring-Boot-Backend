@@ -1,10 +1,12 @@
 package com.medplus.exptracker.Model;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
 public class Category {
 	Integer id;
 	String name;
-	Integer amount;
+	BigDecimal monthly_limit;
 }

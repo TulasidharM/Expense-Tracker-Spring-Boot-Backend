@@ -57,22 +57,14 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         );
     }
 
+    
     @Override
     public int delete(Integer id, Integer employeeId) {
         String delete = "DELETE FROM expenses WHERE id = ? AND employee_id = ? AND status = 'PENDING'";
         return jdbcTemplate.update(delete, id, employeeId);
     }
 
-    @Override
-    public List<Expense> findByManagerId(Integer managerId, String status) {
-        StringBuilder findmng = new StringBuilder("SELECT * FROM expenses WHERE manager_id = ?");
-        if (status != null && !status.isBlank()) {
-            findmng.append(" AND status = ? ORDER BY date DESC");
-            return jdbcTemplate.query(findmng.toString(), new BeanPropertyRowMapper<>(Expense.class), managerId, status);
-        }
-        findmng.append(" ORDER BY date DESC");
-        return jdbcTemplate.query(findmng.toString(), new BeanPropertyRowMapper<>(Expense.class), managerId);
-    }
+    
 
     @Override
     public int updateStatus(Integer id, String status, String remarks, Integer managerId) {
@@ -97,18 +89,13 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.queryForObject(findexpid, new BeanPropertyRowMapper<>(Expense.class), id);
     }
 
-
     @Override
     public List<Category> findAllCategories() {
-        String getcate = "SELECT * FROM categories ORDER BY name";
+        String getcate = "SELECT * FROM categories";
         return jdbcTemplate.query(getcate, new BeanPropertyRowMapper<>(Category.class));
     }
 
-    @Override
-    public String getUserRoleById(Integer userId) {
-        String getrolebyid = "SELECT r.name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
-        return jdbcTemplate.queryForObject(getrolebyid, String.class, userId);
-    }
+   
 
     @Override
     public Integer getManagerIdByEmployeeId(Integer employeeId) {
@@ -128,38 +115,9 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.query(daterange, new BeanPropertyRowMapper<>(Expense.class), employeeId, startDate, endDate);
     }
 
-    @Override
-    public boolean existsByIdAndEmployeeId(Integer id, Integer employeeId) {
-        String expbyemp = "SELECT COUNT(*) FROM expenses WHERE id = ? AND employee_id = ?";
-        Integer count = jdbcTemplate.queryForObject(expbyemp, Integer.class, id, employeeId);
-        return count != null && count > 0;
-    }
+   
 
-    @Override
-    public boolean existsByIdAndManagerId(Integer id, Integer managerId) {
-        String expbymng = "SELECT COUNT(*) FROM expenses WHERE id = ? AND manager_id = ?";
-        Integer count = jdbcTemplate.queryForObject(expbymng, Integer.class, id, managerId);
-        return count != null && count > 0;
-    }
-
-    @Override
-    public Long countExpensesByEmployeeId(Integer employeeId) {
-        String count = "SELECT COUNT(*) FROM expenses WHERE employee_id = ?";
-        return jdbcTemplate.queryForObject(count, Long.class, employeeId);
-    }
-
-    @Override
-    public Long countPendingExpensesByManagerId(Integer managerId) {
-        String countpending = "SELECT COUNT(*) FROM expenses WHERE manager_id = ? AND status = 'PENDING'";
-        return jdbcTemplate.queryForObject(countpending, Long.class, managerId);
-    }
-
-    @Override
-    public Double sumExpenseAmountsByEmployeeId(Integer employeeId) {
-        String sumbyemp = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses WHERE employee_id = ?";
-        return jdbcTemplate.queryForObject(sumbyemp, Double.class, employeeId);
-    }
-
+    
     @Override
     public Double sumApprovedExpensesByManagerId(Integer managerId) {
         String approvedexp = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses WHERE manager_id = ? AND status = 'APPROVED'";
@@ -173,4 +131,6 @@ public class ExpenseDAOImpl implements ExpenseDAO {
                     "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED'";
         return jdbcTemplate.queryForObject(expforcatbymon, Double.class, employeeId, categoryId, month, year);
     }
+
+	
 }
