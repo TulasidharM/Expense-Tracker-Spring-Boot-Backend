@@ -78,7 +78,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         String sql = "UPDATE expenses SET status=?, remarks=? WHERE id=? AND manager_id=? AND status='PENDING'";
         return jdbcTemplate.update(sql, status, remarks, id, managerId);
     }
-
+    
     @Override
     public List<Expense> findAll(String status) {
         StringBuilder sql = new StringBuilder("SELECT * FROM expenses");
@@ -89,7 +89,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         sql.append(" ORDER BY date DESC");
         return jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<>(Expense.class));
     }
-
+    
     @Override
     public Expense findById(Integer id) {
         String sql = "SELECT * FROM expenses WHERE id = ?";

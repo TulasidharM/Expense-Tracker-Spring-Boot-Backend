@@ -4,7 +4,6 @@ package com.medplus.exptracker.Model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -35,8 +34,7 @@ public class Expense {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @NotNull(message = "Date is required")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    
     private LocalDate date;
 
 

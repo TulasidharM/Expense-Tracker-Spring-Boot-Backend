@@ -3,7 +3,8 @@ package com.medplus.exptracker.Service;
 import java.util.List;
 
 import com.medplus.exptracker.Model.Expense;
-import com.medplus.exptracker.Model.Category
+import com.medplus.exptracker.Model.Category;
+
 public interface ExpenseService {
     List<Expense> getExpensesByEmployeeId(Integer employeeId);
     void createExpense(Expense expense);

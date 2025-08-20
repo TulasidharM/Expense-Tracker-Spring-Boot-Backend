@@ -34,7 +34,8 @@ public class SecurityConfig {
 			auth.requestMatchers("/login").permitAll()
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
-				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER");
+				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
+				.requestMatchers("/api/expenses/addexpense").permitAll();
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());

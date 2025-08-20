@@ -1,8 +1,10 @@
 package com.medplus.exptracker.Controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,16 +22,17 @@ import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin(origins = "http://localhost:3000")
-@RequiredArgsConstructor
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @Validated
 public class ExpenseController {
-
-    private final ExpenseService expenseService;
+	
+	//TODO:Add controller Advice for exceptions*
+	
+	@Autowired
+    private ExpenseService expenseService;
 
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<Expense>> getExpensesForEmployee(@PathVariable Integer employeeId) {
@@ -53,10 +56,14 @@ public class ExpenseController {
         List<Expense> expenses = expenseService.getAllExpenses(status);
         return ResponseEntity.ok(expenses);
     }
+    
+    
 
-    @PostMapping
+    @PostMapping("/addexpense")
     public ResponseEntity<String> createExpense(@Valid @RequestBody Expense expense) {
-        expenseService.createExpense(expense);
+        expense.setDate(LocalDate.now());
+    	expenseService.createExpense(expense);
+        
         return ResponseEntity.ok("Expense created successfully");
     }
 

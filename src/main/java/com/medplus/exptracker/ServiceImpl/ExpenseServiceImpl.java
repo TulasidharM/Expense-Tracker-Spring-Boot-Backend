@@ -19,17 +19,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseDAO expenseDAO;
 @Override
 	public List<Category> getCategories() {
-		// TODO Auto-generated method stub
+		// TODO:Write Get Categories
 		return null;
 	}
     @Override
     public List<Expense> getExpensesByEmployeeId(Integer employeeId) {
         return expenseDAO.findByEmployeeId(employeeId);
     }
-
+    
+    //TODO: Only allow employees to submit expenses
     @Override
     public void createExpense(Expense expense) {
-        // Set default status if not provided
         if (expense.getStatus() == null || expense.getStatus().isEmpty()) {
             expense.setStatus("PENDING");
         }
