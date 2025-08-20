@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.medplus.exptracker.Dao.ExpenseDAO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
+import com.medplus.exptracker.Model.Category;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +17,11 @@ import lombok.RequiredArgsConstructor;
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseDAO expenseDAO;
-
+@Override
+	public List<Category> getCategories() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     @Override
     public List<Expense> getExpensesByEmployeeId(Integer employeeId) {
         return expenseDAO.findByEmployeeId(employeeId);
