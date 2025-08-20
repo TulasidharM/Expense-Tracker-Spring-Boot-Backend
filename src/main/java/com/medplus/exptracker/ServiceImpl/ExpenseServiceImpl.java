@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.medplus.exptracker.Dao.ExpenseDAO;
+import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
-import com.medplus.exptracker.Model.Category;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,22 +16,34 @@ import lombok.RequiredArgsConstructor;
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseDAO expenseDAO;
-@Override
-	public List<Category> getCategories() {
-		// TODO:Write Get Categories
-		return null;
-	}
+
+    @Override
+    public List<Category> getCategories() {
+        return expenseDAO.findAllCategories();
+    }
+
     @Override
     public List<Expense> getExpensesByEmployeeId(Integer employeeId) {
         return expenseDAO.findByEmployeeId(employeeId);
     }
     
-    //TODO: Only allow employees to submit expenses
     @Override
     public void createExpense(Expense expense) {
+        String userRole = expenseDAO.getUserRoleById(expense.getEmployeeId());
+        if (!"EMPLOYEE".equals(userRole)) {
+            throw new RuntimeException("Only employees are allowed to submit expenses");
+        }
+        
+        Integer managerId = expenseDAO.getManagerIdByEmployeeId(expense.getEmployeeId());
+        if (managerId == null) {
+            throw new RuntimeException("Employee must have an assigned manager to submit expenses");
+        }
+        expense.setManagerId(managerId);
+        
         if (expense.getStatus() == null || expense.getStatus().isEmpty()) {
             expense.setStatus("PENDING");
         }
+        
         expenseDAO.save(expense);
     }
 
@@ -81,5 +92,46 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public Expense getExpenseById(Integer id) {
         return expenseDAO.findById(id);
+    }
+
+
+    @Override
+    public boolean validateExpenseOwnership(Integer expenseId, Integer employeeId) {
+        return expenseDAO.existsByIdAndEmployeeId(expenseId, employeeId);
+    }
+
+    @Override
+    public boolean validateManagerAccess(Integer expenseId, Integer managerId) {
+        return expenseDAO.existsByIdAndManagerId(expenseId, managerId);
+    }
+
+    @Override
+    public List<Expense> getExpensesByStatus(String status) {
+        return expenseDAO.findByStatus(status);
+    }
+
+    @Override
+    public List<Expense> getExpensesByDateRange(Integer employeeId, String startDate, String endDate) {
+        return expenseDAO.findByDateRange(employeeId, startDate, endDate);
+    }
+
+    @Override
+    public Long getExpenseCountByEmployee(Integer employeeId) {
+        return expenseDAO.countExpensesByEmployeeId(employeeId);
+    }
+
+    @Override
+    public Long getPendingExpenseCountByManager(Integer managerId) {
+        return expenseDAO.countPendingExpensesByManagerId(managerId);
+    }
+
+    @Override
+    public Double getTotalExpenseAmountByEmployee(Integer employeeId) {
+        return expenseDAO.sumExpenseAmountsByEmployeeId(employeeId);
+    }
+
+    @Override
+    public Double getTotalApprovedAmountByManager(Integer managerId) {
+        return expenseDAO.sumApprovedExpensesByManagerId(managerId);
     }
 }

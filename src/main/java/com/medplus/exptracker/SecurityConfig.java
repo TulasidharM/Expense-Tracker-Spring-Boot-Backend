@@ -35,7 +35,8 @@ public class SecurityConfig {
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
 				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
-				.requestMatchers("/api/expenses/addexpense").permitAll();
+				.requestMatchers("/api/expenses/addexpense").permitAll()
+				.requestMatchers("/api/expenses/categories").permitAll();
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());
