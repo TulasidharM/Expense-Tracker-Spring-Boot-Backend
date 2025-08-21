@@ -71,12 +71,7 @@ public class ExpenseController {
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteExpense(@PathVariable Integer id, Integer employeeId) {
-        expenseService.deleteExpense(id, employeeId);
-        return ResponseEntity.ok("Expense deleted successfully");
-    }
-
+    
     @PutMapping("/{id}/approve")
     public ResponseEntity<String> approveExpense(@PathVariable Integer id, @RequestBody Map<String, Object> req) {
         String remarks = (String) req.get("remarks");

@@ -37,6 +37,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/expenses/addexpense").authenticated()
 				.requestMatchers("/api/expenses/categories").permitAll()
 				.requestMatchers("/api/expenses/employee/**").permitAll()
+				.requestMatchers("/api/expenses/update-expense").hasRole("EMPLOYEE")
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
 				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
