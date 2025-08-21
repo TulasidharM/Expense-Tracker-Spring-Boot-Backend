@@ -34,13 +34,12 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 				.requestMatchers("/login").authenticated()
 				.requestMatchers("/getuser").authenticated()
-				.requestMatchers("/api/expenses/addexpense").hasRole("EMPLOYEE")
+				.requestMatchers("/api/expenses/addexpense").authenticated()
 				.requestMatchers("/api/expenses/categories").permitAll()
 				.requestMatchers("/api/expenses/employee/**").permitAll()
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
 				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
-				//TODO need to change these from permitall to hasrole manager
 				.requestMatchers("/api/manager/expenses/*/approve").permitAll()
 				.requestMatchers("/api/manager/expenses/*/reject").permitAll()
 				.requestMatchers("/api/manager/expenses/*").permitAll();
