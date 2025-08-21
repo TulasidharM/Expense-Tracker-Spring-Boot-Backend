@@ -18,12 +18,8 @@ public interface ExpenseService {
     void rejectExpense(Integer id, String remarks, Integer managerId);
     List<Expense> getAllExpenses(String status);
     List<Category> getCategories();
-  //  boolean validateExpenseOwnership(Integer expenseId, Integer employeeId);
-   // boolean validateManagerAccess(Integer expenseId, Integer managerId);
     List<Expense> getExpensesByStatus(String status);
     List<Expense> getExpensesByDateRange(Integer employeeId, String startDate, String endDate);    
-  //  Long getExpenseCountByEmployee(Integer employeeId);
-   // Long getPendingExpenseCountByManager(Integer managerId);
-    //Double getTotalExpenseAmountByEmployee(Integer employeeId);
     Double getTotalApprovedAmountByManager(Integer managerId);
+    
 }

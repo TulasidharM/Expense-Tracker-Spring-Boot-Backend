@@ -23,14 +23,14 @@ import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*" )
 @Validated
 public class ExpenseController {
-    
-    // TODO: Add global Controller Advice for exception handling
     
     @Autowired
     private ExpenseService expenseService;
@@ -66,9 +66,11 @@ public class ExpenseController {
         Expense expenses = expenseService.getExpenseByManagerId(managerId);
         return ResponseEntity.ok(expenses);
     }
-    @PostMapping
+    
+    @PostMapping("/addexpense")
     public ResponseEntity<String> createExpense(@Valid @RequestBody Expense expense) {
         expense.setDate(LocalDate.now());
+        log.info("Creating expense: " + expense);
         expenseService.createExpense(expense);
         return ResponseEntity.ok("Expense created successfully");
     }
@@ -87,7 +89,7 @@ public class ExpenseController {
     public List<Category> getCategories(){
         List<Category> categories = expenseService.getCategories();
         return categories;
-    }
+    } 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteExpense(

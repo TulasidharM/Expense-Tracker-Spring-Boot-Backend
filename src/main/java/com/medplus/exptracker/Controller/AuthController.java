@@ -5,17 +5,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.medplus.exptracker.Service.UserService;
+import com.medplus.exptracker.entity.User;
 
 @RestController
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class AuthController {
+	
+	@Autowired
+	UserService userService;
+	
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> loginUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -23,9 +32,22 @@ public class AuthController {
 						        .map(GrantedAuthority::getAuthority)
 						        .collect(Collectors.joining(", "));
 		var res = new HashMap<String,String>();
+		
 		res.put("role",roles);
 		return  ResponseEntity.ok(res);
 	}
+	
+	@GetMapping("/getuser")
+	public User getUserByUserName() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getName();
+
+		User user = userService.getUserByUserName(username);
+		user.setPassword("");
+		return user;
+	}
+	
+	
 	
 	
 }

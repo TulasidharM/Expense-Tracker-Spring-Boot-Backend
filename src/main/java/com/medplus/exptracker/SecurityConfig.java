@@ -28,15 +28,16 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		http.csrf(csrf->csrf.disable());
-		http.cors(Customizer.withDefaults());
+		http.cors(c->c.disable());
 		
 		http.authorizeHttpRequests(auth->{
 			auth.requestMatchers("/login").permitAll()
+				.requestMatchers("/getuser").permitAll()
+				.requestMatchers("/api/expenses/addexpense").permitAll()
+				.requestMatchers("/api/expenses/categories").permitAll()
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
-				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
-				.requestMatchers("/api/expenses/addexpense").permitAll()
-				.requestMatchers("/api/expenses/categories").permitAll();
+				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER");
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());
