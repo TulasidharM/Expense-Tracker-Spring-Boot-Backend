@@ -1,5 +1,7 @@
 package com.medplus.exptracker.Service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,5 +42,11 @@ public class UserService implements UserDetailsService {
     	            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     	return user;
     	
+    }
+    
+    
+    public User getUserById(Integer userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        return userOpt.orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
 }

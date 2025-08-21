@@ -1,9 +1,7 @@
 package com.medplus.exptracker.Model;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -34,9 +32,7 @@ public class Expense {
     @NotBlank(message = "Description is required")
     private String description;
 
-    
     private LocalDate date;
-
 
     private String status;
 
@@ -45,4 +41,8 @@ public class Expense {
     private String remarks;
 
     private String receiptUrl;
+
+    private String employeeName;
+
+    private String categoryName;
 }

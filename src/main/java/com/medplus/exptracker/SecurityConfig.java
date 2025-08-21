@@ -26,11 +26,11 @@ public class SecurityConfig {
     }
 	
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-		http.csrf(csrf->csrf.disable());
-		http.cors(c->c.disable());
-	
-		http.authorizeHttpRequests(auth->{
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable());
+		http.cors(c -> c.disable());
+		
+		http.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/login").permitAll()
 				.requestMatchers("/getuser").permitAll()
 				.requestMatchers("/api/expenses/addexpense").permitAll()
@@ -41,9 +41,10 @@ public class SecurityConfig {
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
 				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
-				.requestMatchers("/api/expenses/*/approve").permitAll()
-				.requestMatchers("/api/expenses/*/reject").permitAll()
-				.requestMatchers("/api/expenses/manager/**").permitAll();
+				//TODO need to change these from permitall to hasrole manager
+				.requestMatchers("/api/manager/expenses/*/approve").permitAll()
+				.requestMatchers("/api/manager/expenses/*/reject").permitAll()
+				.requestMatchers("/api/manager/expenses/*").permitAll();
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());
@@ -53,4 +54,3 @@ public class SecurityConfig {
 	}
 	
 }
-
