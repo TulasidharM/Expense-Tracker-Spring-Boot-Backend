@@ -1,6 +1,7 @@
 package com.medplus.exptracker.Controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ public class ExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
-
+    
+    
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<Expense>> getExpensesForEmployee(@PathVariable Integer employeeId) {
         List<Expense> expenses = expenseService.getExpensesByEmployeeId(employeeId);
@@ -49,6 +51,10 @@ public class ExpenseController {
     @GetMapping
     public ResponseEntity<List<Expense>> getAllExpenses() {
         List<Expense> expenses = expenseService.getAllExpenses(null);
+
+    @GetMapping
+    public ResponseEntity<List<Expense>> getAllExpenses( @RequestParam(required = false) String status) {
+        List<Expense> expenses = expenseService.getAllExpenses(status);
         return ResponseEntity.ok(expenses);
     }
 
@@ -60,11 +66,13 @@ public class ExpenseController {
         return ResponseEntity.ok("Expense created successfully");
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateExpense(@PathVariable Integer id, @Valid @RequestBody Expense expense) {
-        expense.setId(id);
+    @PutMapping("/update-expense")
+    public ResponseEntity<Map<String,String>> updateExpense(@Valid @RequestBody Expense expense) {
         expenseService.updateExpense(expense);
-        return ResponseEntity.ok("Expense updated successfully");
+        
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense Updated Succesfully!");
+        return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("/{id}")
