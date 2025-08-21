@@ -3,6 +3,7 @@ package com.medplus.exptracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,16 +29,14 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		http.csrf(csrf->csrf.disable());
-		http.cors(c->c.disable());
-	
 		http.authorizeHttpRequests(auth->{
-			auth.requestMatchers("/login").permitAll()
-				.requestMatchers("/getuser").permitAll()
-				.requestMatchers("/api/expenses/addexpense").permitAll()
-				.requestMatchers("/api/expenses/**").permitAll()
+			auth
+				.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+				.requestMatchers("/login").authenticated()
+				.requestMatchers("/getuser").authenticated()
+				.requestMatchers("/api/expenses/addexpense").hasRole("EMPLOYEE")
 				.requestMatchers("/api/expenses/categories").permitAll()
 				.requestMatchers("/api/expenses/employee/**").permitAll()
-				.requestMatchers("/api/expenses/**").permitAll()
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
 				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
