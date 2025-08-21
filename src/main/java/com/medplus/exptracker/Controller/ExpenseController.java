@@ -51,10 +51,6 @@ public class ExpenseController {
     @GetMapping
     public ResponseEntity<List<Expense>> getAllExpenses() {
         List<Expense> expenses = expenseService.getAllExpenses(null);
-
-    @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses( @RequestParam(required = false) String status) {
-        List<Expense> expenses = expenseService.getAllExpenses(status);
         return ResponseEntity.ok(expenses);
     }
 
