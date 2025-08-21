@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ExpenseDAOImpl implements ExpenseDAO {
-    
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -37,8 +37,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
                 expense.getStatus() != null ? expense.getStatus() : "PENDING",
                 expense.getManagerId(),
                 expense.getRemarks(),
-                expense.getReceiptUrl()
-        );
+                expense.getReceiptUrl());
     }
 
     @Override
@@ -53,25 +52,21 @@ public class ExpenseDAOImpl implements ExpenseDAO {
                 expense.getRemarks(),
                 expense.getReceiptUrl(),
                 expense.getId(),
-                expense.getEmployeeId()
-        );
+                expense.getEmployeeId());
     }
 
-    
     @Override
     public int delete(Integer id, Integer employeeId) {
         String delete = "DELETE FROM expenses WHERE id = ? AND employee_id = ? AND status = 'PENDING'";
         return jdbcTemplate.update(delete, id, employeeId);
     }
 
-    
-
     @Override
     public int updateStatus(Integer id, String status, String remarks, Integer managerId) {
         String updatests = "UPDATE expenses SET status=?, remarks=? WHERE id=? AND manager_id=? AND status='PENDING'";
         return jdbcTemplate.update(updatests, status, remarks, id, managerId);
     }
-    
+
     @Override
     public List<Expense> findAll(String status) {
         StringBuilder searchall = new StringBuilder("SELECT * FROM expenses");
@@ -82,17 +77,17 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         searchall.append(" ORDER BY date DESC");
         return jdbcTemplate.query(searchall.toString(), new BeanPropertyRowMapper<>(Expense.class));
     }
-    
+
     @Override
     public Expense findById(Integer id) {
         String findexpid = "SELECT * FROM expenses WHERE id = ?";
         return jdbcTemplate.queryForObject(findexpid, new BeanPropertyRowMapper<>(Expense.class), id);
     }
-    
+
     @Override
-    public Expense findExpensesByManagerId(Integer id) {
-        String findByManager = "SELECT * FROM expenses WHERE manager_id = ?";
-        return jdbcTemplate.queryForObject(findByManager, new BeanPropertyRowMapper<>(Expense.class), id);
+    public List<Expense> findExpensesByManagerId(Integer managerId) {
+        String findByManager = "SELECT * FROM expenses WHERE manager_id = ? ORDER BY date DESC";
+        return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(Expense.class), managerId);
     }
 
     @Override
@@ -125,9 +120,6 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.query(daterange, new BeanPropertyRowMapper<>(Expense.class), employeeId, startDate, endDate);
     }
 
-   
-
-    
     @Override
     public Double sumApprovedExpensesByManagerId(Integer managerId) {
         String approvedexp = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses WHERE manager_id = ? AND status = 'APPROVED'";
@@ -137,12 +129,8 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     @Override
     public Double getTotalExpensesForCategoryAndMonth(Integer employeeId, Integer categoryId, String month, String year) {
         String expforcatbymon = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses " +
-                    "WHERE employee_id = ? AND category_id = ? " +
-                    "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED'";
+                "WHERE employee_id = ? AND category_id = ? " +
+                "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED'";
         return jdbcTemplate.queryForObject(expforcatbymon, Double.class, employeeId, categoryId, month, year);
     }
-
-	
-
-	
 }

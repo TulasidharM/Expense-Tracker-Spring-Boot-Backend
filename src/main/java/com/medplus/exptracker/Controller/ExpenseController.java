@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.Model.Category;
@@ -28,10 +27,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin(origins = "*", allowedHeaders = "*" )
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Validated
 public class ExpenseController {
-    
+
     @Autowired
     private ExpenseService expenseService;
 
@@ -41,32 +40,18 @@ public class ExpenseController {
         return ResponseEntity.ok(expenses);
     }
 
-//    @GetMapping("/manager/{managerId}")
-//    public ResponseEntity<List<Expense>> getTeamExpenses(
-//            @PathVariable Integer managerId,
-//            @RequestParam(required = false) String status
-//    ) {
-//        List<Expense> expenses = expenseService.getTeamExpenses(managerId, status);
-//        return ResponseEntity.ok(expenses);
-//    }
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<List<Expense>> getExpenseByManagerId(@PathVariable Integer managerId) {
+        List<Expense> expenses = expenseService.getExpensesByManagerId(managerId);
+        return ResponseEntity.ok(expenses);
+    }
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses(
-            @RequestParam(required = false) String status
-    ) {
-        List<Expense> expenses = expenseService.getAllExpenses(status);
+    public ResponseEntity<List<Expense>> getAllExpenses() {
+        List<Expense> expenses = expenseService.getAllExpenses(null);
         return ResponseEntity.ok(expenses);
     }
-    
-    @GetMapping("/manager/{managerId}")
-    public ResponseEntity<Expense> getExpenseByManagerId(
-            @PathVariable Integer managerId,
-            @RequestParam(required = false) String status
-    ) {
-        Expense expenses = expenseService.getExpenseByManagerId(managerId);
-        return ResponseEntity.ok(expenses);
-    }
-    
+
     @PostMapping("/addexpense")
     public ResponseEntity<String> createExpense(@Valid @RequestBody Expense expense) {
         expense.setDate(LocalDate.now());
@@ -76,49 +61,36 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateExpense(
-            @PathVariable Integer id,
-            @Valid @RequestBody Expense expense
-    ) {
+    public ResponseEntity<String> updateExpense(@PathVariable Integer id, @Valid @RequestBody Expense expense) {
         expense.setId(id);
         expenseService.updateExpense(expense);
         return ResponseEntity.ok("Expense updated successfully");
     }
-    
-    @GetMapping(value="/categories" ,produces = "application/json")
-    public List<Category> getCategories(){
-        List<Category> categories = expenseService.getCategories();
-        return categories;
-    } 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteExpense(
-            @PathVariable Integer id,
-            @RequestParam Integer employeeId
-    ) {
+    public ResponseEntity<String> deleteExpense(@PathVariable Integer id, Integer employeeId) {
         expenseService.deleteExpense(id, employeeId);
         return ResponseEntity.ok("Expense deleted successfully");
     }
 
     @PutMapping("/{id}/approve")
-    public ResponseEntity<String> approveExpense(
-            @PathVariable Integer id,
-            @RequestBody Map<String, String> req,
-            @RequestParam Integer managerId
-    ) {
-        String remarks = req.get("remarks");
+    public ResponseEntity<String> approveExpense(@PathVariable Integer id, @RequestBody Map<String, Object> req) {
+        String remarks = (String) req.get("remarks");
+        Integer managerId = (Integer) req.get("managerId");
         expenseService.approveExpense(id, remarks, managerId);
         return ResponseEntity.ok("Expense approved successfully");
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<String> rejectExpense(
-            @PathVariable Integer id,
-            @RequestBody Map<String, String> req,
-            @RequestParam Integer managerId
-    ) {
-        String remarks = req.get("remarks");
+    public ResponseEntity<String> rejectExpense(@PathVariable Integer id, @RequestBody Map<String, Object> req) {
+        String remarks = (String) req.get("remarks");
+        Integer managerId = (Integer) req.get("managerId");
         expenseService.rejectExpense(id, remarks, managerId);
         return ResponseEntity.ok("Expense rejected successfully");
+    }
+
+    @GetMapping(value = "/categories", produces = "application/json")
+    public List<Category> getCategories() {
+        return expenseService.getCategories();
     }
 }

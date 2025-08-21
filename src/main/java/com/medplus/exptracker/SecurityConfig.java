@@ -34,10 +34,14 @@ public class SecurityConfig {
 			auth.requestMatchers("/login").permitAll()
 				.requestMatchers("/getuser").permitAll()
 				.requestMatchers("/api/expenses/addexpense").permitAll()
+				.requestMatchers("/api/expenses/**").permitAll()
 				.requestMatchers("/api/expenses/categories").permitAll()
 				.requestMatchers("/getReports").hasRole("ADMIN")
 				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
-				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER");
+				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
+				.requestMatchers("/api/expenses/*/approve").permitAll()
+				.requestMatchers("/api/expenses/*/reject").permitAll()
+				.requestMatchers("/api/expenses/manager/**").permitAll();
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());
@@ -45,7 +49,6 @@ public class SecurityConfig {
 	
 		return http.build();
 	}
-
-	
 	
 }
+
