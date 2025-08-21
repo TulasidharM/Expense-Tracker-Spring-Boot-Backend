@@ -21,4 +21,6 @@ public interface ExpenseDAO {
     List<Expense> findByDateRange(Integer employeeId, String startDate, String endDate);
     Double sumApprovedExpensesByManagerId(Integer managerId);
     Double getTotalExpensesForCategoryAndMonth(Integer employeeId, Integer categoryId, String month, String year);
+	Expense findExpensesByManagerId(Integer id);
+	//List<Expense> findExpensesByManagerId(Integer managerId, String status);
 }

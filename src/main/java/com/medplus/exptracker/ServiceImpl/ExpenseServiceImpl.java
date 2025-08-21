@@ -28,6 +28,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
     
     @Override
+	public Expense getExpenseByManagerId(Integer managerId) {
+    	return expenseDAO.findExpensesByManagerId(managerId);
+	}
+    
+    @Override
     public void createExpense(Expense expense) {
         String userRole = expenseDAO.getUserRoleById(expense.getEmployeeId());
         if (!"EMPLOYEE".equals(userRole)) {
@@ -93,6 +98,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense getExpenseById(Integer id) {
         return expenseDAO.findById(id);
     }
+    
+//    @Override
+//    public Expense getExpenseByManagerId(Integer id) {
+//        return expenseDAO.findByManagerId(id);
+//    }
 
 
 //    @Override
@@ -134,4 +144,6 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Double getTotalApprovedAmountByManager(Integer managerId) {
         return expenseDAO.sumApprovedExpensesByManagerId(managerId);
     }
+
+	
 }

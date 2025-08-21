@@ -12,7 +12,8 @@ public interface ExpenseService {
     void updateExpense(Expense expense);
     void deleteExpense(Integer id, Integer employeeId);
     Expense getExpenseById(Integer id);
-  //  List<Expense> getTeamExpenses(Integer managerId, String status);
+    Expense getExpenseByManagerId(Integer id);
+   // List<Expense> getTeamExpenses(Integer managerId, String status);
     void approveExpense(Integer id, String remarks, Integer managerId);
     void rejectExpense(Integer id, String remarks, Integer managerId);
     List<Expense> getAllExpenses(String status);

@@ -58,6 +58,14 @@ public class ExpenseController {
         return ResponseEntity.ok(expenses);
     }
     
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<Expense> getExpenseByManagerId(
+            @PathVariable Integer managerId,
+            @RequestParam(required = false) String status
+    ) {
+        Expense expenses = expenseService.getExpenseByManagerId(managerId);
+        return ResponseEntity.ok(expenses);
+    }
     @PostMapping
     public ResponseEntity<String> createExpense(@Valid @RequestBody Expense expense) {
         expense.setDate(LocalDate.now());

@@ -88,6 +88,12 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         String findexpid = "SELECT * FROM expenses WHERE id = ?";
         return jdbcTemplate.queryForObject(findexpid, new BeanPropertyRowMapper<>(Expense.class), id);
     }
+    
+    @Override
+    public Expense findExpensesByManagerId(Integer id) {
+        String findByManager = "SELECT * FROM expenses WHERE manager_id = ?";
+        return jdbcTemplate.queryForObject(findByManager, new BeanPropertyRowMapper<>(Expense.class), id);
+    }
 
     @Override
     public List<Category> findAllCategories() {
@@ -135,6 +141,8 @@ public class ExpenseDAOImpl implements ExpenseDAO {
                     "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED'";
         return jdbcTemplate.queryForObject(expforcatbymon, Double.class, employeeId, categoryId, month, year);
     }
+
+	
 
 	
 }
