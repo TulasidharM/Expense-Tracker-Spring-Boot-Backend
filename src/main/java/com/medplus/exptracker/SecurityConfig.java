@@ -47,8 +47,8 @@ public class SecurityConfig {
 				.requestMatchers("/api/manager/expenses/*").hasRole("MANAGER")
 				.requestMatchers("/api/manager/expenses/*/approvedAmounts").hasRole("MANAGER")
 				.requestMatchers("/api/manager/expenses/*/employeeList").hasRole("MANAGER")
-		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER");
-				
+		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER")
+			
 				.requestMatchers("/api/admin/add-user").hasRole("ADMIN")
 				.requestMatchers("/api/admin/get-managers").permitAll();
 			
