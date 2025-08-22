@@ -32,6 +32,7 @@ public class ManagerExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
+    
     @Autowired
     private ManagerService managerService;
 
@@ -69,19 +70,19 @@ public class ManagerExpenseController {
 
     @PutMapping("/{id}/approve")
     public ResponseEntity<String> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
-        expenseService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
+        managerService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
         return ResponseEntity.ok("Expense approved successfully");
     }
 
     @PutMapping("/{id}/reject")
     public ResponseEntity<String> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
-        expenseService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
+        managerService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
         return ResponseEntity.ok("Expense rejected successfully");
     }
 
     @GetMapping("/{managerId}/approvedAmounts")
     public ResponseEntity<List<Expense>> getApprovedAmounts(@PathVariable Integer managerId) {
-        List<Expense> approvedExpenses = expenseService.getExpensesByManagerId(managerId).stream()
+        List<Expense> approvedExpenses = managerService.getExpensesByManagerId(managerId).stream()
                 .filter(exp -> "APPROVED".equals(exp.getStatus()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(approvedExpenses);
@@ -89,7 +90,7 @@ public class ManagerExpenseController {
 
     @GetMapping("/{managerId}/employeeList")
     public ResponseEntity<Map<String, Object>> getEmployeeList(@PathVariable Integer managerId) {
-        List<Expense> expenses = expenseService.getExpensesByManagerId(managerId);
+        List<Expense> expenses = managerService.getExpensesByManagerId(managerId);
         
         List<String> uniqueEmployees = expenses.stream()
                 .map(expense -> {
@@ -113,7 +114,7 @@ public class ManagerExpenseController {
         int currentMonth = now.getMonthValue();
         int currentYear = now.getYear();
         
-        List<Expense> currentMonthApproved = expenseService.getExpensesByManagerId(managerId).stream()
+        List<Expense> currentMonthApproved = managerService.getExpensesByManagerId(managerId).stream()
                 .filter(exp -> "APPROVED".equals(exp.getStatus()))
                 .filter(exp -> {
                     LocalDate expenseDate = exp.getDate();
