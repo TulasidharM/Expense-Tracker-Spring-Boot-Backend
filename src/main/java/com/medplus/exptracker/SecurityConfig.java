@@ -42,9 +42,12 @@ public class SecurityConfig {
 				.requestMatchers("/api/employee/update-expense").hasRole("EMPLOYEE")
 				.requestMatchers("/api/employee/delete-expense/*").hasRole("EMPLOYEE")
 
-				.requestMatchers("/api/manager/expenses/*/approve").permitAll()
-				.requestMatchers("/api/manager/expenses/*/reject").permitAll()
-				.requestMatchers("/api/manager/expenses/*").permitAll();
+				.requestMatchers("/api/manager/expenses/*/approve").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/*/reject").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/*").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/*/approvedAmounts").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/*/employeeList").hasRole("MANAGER")
+		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER");
 		})
 		.userDetailsService(userService)
 		.httpBasic(Customizer.withDefaults());
