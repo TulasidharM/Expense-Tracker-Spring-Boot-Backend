@@ -1,5 +1,6 @@
 package com.medplus.exptracker.Controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,14 +66,18 @@ public class ManagerExpenseController {
     }
 
     @PutMapping("/{id}/approve")
-    public ResponseEntity<String> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String,String>> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
         expenseService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
-        return ResponseEntity.ok("Expense approved successfully");
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense approved succesfully");
+        return ResponseEntity.ok(res);
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<String> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String,String>> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
         expenseService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
-        return ResponseEntity.ok("Expense rejected successfully");
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense rejected successfully");
+        return ResponseEntity.ok(res);
     }
 }
