@@ -42,6 +42,7 @@ public class ManagerExpenseController {
 
     private Map<Integer, String> categoryIdToNameMap;
 
+
     @Autowired
     public void initCategoryMap() {
         categoryIdToNameMap = expenseService.getCategories().stream()
@@ -80,6 +81,7 @@ public class ManagerExpenseController {
         managerService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
         return ResponseEntity.ok("Expense rejected successfully");
     }
+    
 
     @GetMapping("/{managerId}/approvedAmounts")
     public ResponseEntity<List<Expense>> getApprovedAmounts(@PathVariable Integer managerId) {
