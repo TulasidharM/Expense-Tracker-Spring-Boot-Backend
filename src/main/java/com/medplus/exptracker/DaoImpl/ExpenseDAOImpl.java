@@ -19,11 +19,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     private final JdbcTemplate jdbcTemplate;
 
 
-    @Override
-    public int updateStatus(Integer id, String status, String remarks, Integer managerId) {
-        String updatests = "UPDATE expenses SET status=?, remarks=? WHERE id=? AND manager_id=? AND status='PENDING'";
-        return jdbcTemplate.update(updatests, status, remarks, id, managerId);
-    }
+    
 
     
     @Override

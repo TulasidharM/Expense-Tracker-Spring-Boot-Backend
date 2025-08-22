@@ -65,7 +65,12 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		String expforcatbymon = "SELECT SUM(amount) FROM expenses " +
                 "WHERE employee_id = ? AND category_id = ? " +
                 "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED' AND status != 'PENDING'";
-        return jdbcTemplate.queryForObject(expforcatbymon, BigDecimal.class, employeeId, categoryId, month, year);
+		
+		BigDecimal result =  jdbcTemplate.queryForObject(expforcatbymon, BigDecimal.class, employeeId, categoryId, month, year);
+		if(result == null) {
+			result = new BigDecimal("0");
+        }
+		return result;
 
 	}
 }

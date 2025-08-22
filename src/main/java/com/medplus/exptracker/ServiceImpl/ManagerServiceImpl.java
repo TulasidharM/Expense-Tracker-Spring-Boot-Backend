@@ -10,6 +10,7 @@ import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.EmployeeService;
 import com.medplus.exptracker.Service.ExpenseService;
 import com.medplus.exptracker.Service.ManagerService;
+import com.medplus.exptracker.entity.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,4 +58,12 @@ public class ManagerServiceImpl implements ManagerService{
             throw new RuntimeException("Unable to reject expense. It may not exist or is not in PENDING status.");
         }
     }
+
+
+	@Override
+	public List<User> getAllManager() {
+		List<User> managers;
+		managers = managerDAO.fetchAllManagers();
+ 		return managers;
+	}
 }

@@ -25,8 +25,8 @@ import com.medplus.exptracker.Service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-@RestController
 @Slf4j
+@RestController
 @RequestMapping("/api/employee")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Validated
@@ -47,7 +47,6 @@ public class EmployeeController {
         return ResponseEntity.ok(res);
     }
 
-	
 	@GetMapping("/get-expenses/{employeeId}")
     public ResponseEntity<List<Expense>> getExpensesForEmployee(@PathVariable Integer employeeId) {
         List<Expense> expenses = employeeService.getExpensesByEmployeeId(employeeId);

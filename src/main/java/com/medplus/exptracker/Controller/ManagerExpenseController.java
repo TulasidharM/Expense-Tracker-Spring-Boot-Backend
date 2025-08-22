@@ -21,6 +21,7 @@ import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
+import com.medplus.exptracker.entity.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -152,4 +153,7 @@ public class ManagerExpenseController {
         
         return ResponseEntity.ok(result);
     }
+    
+    
+
 }

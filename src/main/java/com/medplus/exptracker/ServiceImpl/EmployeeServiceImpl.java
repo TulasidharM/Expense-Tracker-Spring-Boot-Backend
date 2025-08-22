@@ -72,7 +72,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         
         BigDecimal expensePerCategory = employeeDAO.getTotalExpenseByCategoryByEmployee(employeeId, categoryId, month,year);
         
-        
         expensePerCategory = expensePerCategory.add(expense.getAmount());
         List<Category> categories = expenseDAO.findAllCategories();
         
