@@ -1,5 +1,6 @@
 package com.medplus.exptracker.DaoImpl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -56,9 +57,9 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     }
 
     @Override
-    public int delete(Integer id, Integer employeeId) {
-        String delete = "DELETE FROM expenses WHERE id = ? AND employee_id = ? AND status = 'PENDING'";
-        return jdbcTemplate.update(delete, id, employeeId);
+    public int delete(Integer expenseId) {
+        String delete = "DELETE FROM expenses WHERE id = ? AND status = 'PENDING'";
+        return jdbcTemplate.update(delete, expenseId);
     }
 
     @Override
@@ -74,7 +75,6 @@ public class ExpenseDAOImpl implements ExpenseDAO {
             searchall.append(" WHERE status = ? ORDER BY date DESC");
             return jdbcTemplate.query(searchall.toString(), new BeanPropertyRowMapper<>(Expense.class), status);
         }
-        searchall.append(" ORDER BY date DESC");
         return jdbcTemplate.query(searchall.toString(), new BeanPropertyRowMapper<>(Expense.class));
     }
 
@@ -126,11 +126,14 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.queryForObject(approvedexp, Double.class, managerId);
     }
 
-    @Override
-    public Double getTotalExpensesForCategoryAndMonth(Integer employeeId, Integer categoryId, String month, String year) {
-        String expforcatbymon = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses " +
+    
+	@Override
+	public BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId, int categoryId,int month, int year) {
+		String expforcatbymon = "SELECT SUM(amount) FROM expenses " +
                 "WHERE employee_id = ? AND category_id = ? " +
-                "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED'";
-        return jdbcTemplate.queryForObject(expforcatbymon, Double.class, employeeId, categoryId, month, year);
-    }
+                "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED' AND status != 'PENDING'";
+        return jdbcTemplate.queryForObject(expforcatbymon, BigDecimal.class, employeeId, categoryId, month, year);
+
+	}
+
 }

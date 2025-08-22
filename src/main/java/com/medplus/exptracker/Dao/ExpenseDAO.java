@@ -1,5 +1,6 @@
 package com.medplus.exptracker.Dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.medplus.exptracker.Model.Category;
@@ -9,7 +10,7 @@ public interface ExpenseDAO {
 	List<Expense> findByEmployeeId(Integer employeeId);
 	void save(Expense expense);
 	int update(Expense expense);
-	int delete(Integer id, Integer employeeId);
+	int delete(Integer expenseId);
 	Expense findById(Integer id);
 	int updateStatus(Integer id, String status, String remarks, Integer managerId);
 	List<Expense> findAll(String status);
@@ -19,6 +20,9 @@ public interface ExpenseDAO {
 	List<Expense> findByStatus(String status);
 	List<Expense> findByDateRange(Integer employeeId, String startDate, String endDate);
 	Double sumApprovedExpensesByManagerId(Integer managerId);
-	Double getTotalExpensesForCategoryAndMonth(Integer employeeId, Integer categoryId, String month, String year);
 	List<Expense> findExpensesByManagerId(Integer managerId);
+	
+	
+	
+	BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId,int CategoryId,int month, int year);
 }

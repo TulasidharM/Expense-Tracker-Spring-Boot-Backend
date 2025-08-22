@@ -34,13 +34,14 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 				.requestMatchers("/login").authenticated()
 				.requestMatchers("/getuser").authenticated()
-				.requestMatchers("/api/expenses/addexpense").authenticated()
+				
 				.requestMatchers("/api/expenses/categories").permitAll()
-				.requestMatchers("/api/expenses/employee/**").permitAll()
-				.requestMatchers("/api/expenses/update-expense").hasRole("EMPLOYEE")
-				.requestMatchers("/getReports").hasRole("ADMIN")
-				.requestMatchers("/getClaims").hasRole("EMPLOYEE")
-				.requestMatchers("/getEmpClaims/**").hasRole("MANAGER")
+				
+				.requestMatchers("/api/employee/get-expenses/*").hasRole("EMPLOYEE")
+				.requestMatchers("/api/employee/addexpense").hasRole("EMPLOYEE")
+				.requestMatchers("/api/employee/update-expense").hasRole("EMPLOYEE")
+				.requestMatchers("/api/employee/delete-expense/*").hasRole("EMPLOYEE")
+
 				.requestMatchers("/api/manager/expenses/*/approve").permitAll()
 				.requestMatchers("/api/manager/expenses/*/reject").permitAll()
 				.requestMatchers("/api/manager/expenses/*").permitAll();

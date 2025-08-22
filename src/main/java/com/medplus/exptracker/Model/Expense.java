@@ -36,6 +36,7 @@ public class Expense {
 
     private String status;
 
+    @NotNull(message="ManagerID is required!")
     private Integer managerId;
 
     private String remarks;
