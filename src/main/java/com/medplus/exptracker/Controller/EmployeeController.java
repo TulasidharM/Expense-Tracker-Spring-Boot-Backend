@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.Model.Expense;
+import com.medplus.exptracker.Service.EmployeeService;
 import com.medplus.exptracker.Service.ExpenseService;
 
 import jakarta.validation.Valid;
@@ -33,25 +34,29 @@ public class EmployeeController {
 	
 	@Autowired
 	ExpenseService expenseService;
+	@Autowired
+	EmployeeService employeeService;
 	
 	@PostMapping("/addexpense")
-    public ResponseEntity<String> createExpense(@Valid @RequestBody Expense expense) {
+    public ResponseEntity<Map<String,String>> createExpense(@Valid @RequestBody Expense expense) {
         expense.setDate(LocalDate.now());
         log.info("Creating expense: " + expense);
-        expenseService.createExpense(expense);
-        return ResponseEntity.ok("Expense created successfully");
+        employeeService.createExpense(expense);
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense Created Succesfully!");
+        return ResponseEntity.ok(res);
     }
 
 	
 	@GetMapping("/get-expenses/{employeeId}")
     public ResponseEntity<List<Expense>> getExpensesForEmployee(@PathVariable Integer employeeId) {
-        List<Expense> expenses = expenseService.getExpensesByEmployeeId(employeeId);
+        List<Expense> expenses = employeeService.getExpensesByEmployeeId(employeeId);
         return ResponseEntity.ok(expenses);
     }
 	
 	@PutMapping("/update-expense")
     public ResponseEntity<Map<String,String>> updateExpense(@Valid @RequestBody Expense expense) {
-        expenseService.updateExpense(expense);
+		employeeService.updateExpense(expense);
         
         var res = new HashMap<String,String>();
         res.put("message", "Expense Updated Succesfully!");
@@ -61,7 +66,7 @@ public class EmployeeController {
 	@DeleteMapping("/delete-expense/{expenseId}")
 	public ResponseEntity<Map<String,String>> deleteExpense(@PathVariable int expenseId){		
 		var res = new HashMap<String,String>();
-		expenseService.deleteExpense(expenseId);
+		employeeService.deleteExpense(expenseId);
 		
 		res.put("message", "Succesfully deleted expense");
 		return ResponseEntity.ok(res);

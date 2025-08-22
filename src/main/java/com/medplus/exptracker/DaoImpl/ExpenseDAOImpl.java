@@ -1,6 +1,5 @@
 package com.medplus.exptracker.DaoImpl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,48 +18,6 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Override
-    public List<Expense> findByEmployeeId(Integer employeeId) {
-        String findemp = "SELECT * FROM expenses WHERE employee_id = ? ORDER BY date DESC";
-        return jdbcTemplate.query(findemp, new BeanPropertyRowMapper<>(Expense.class), employeeId);
-    }
-
-    @Override
-    public void save(Expense expense) {
-        String save = "INSERT INTO expenses (employee_id, category_id, amount, description, date, status, manager_id, remarks, receipt_url) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(save,
-                expense.getEmployeeId(),
-                expense.getCategoryId(),
-                expense.getAmount(),
-                expense.getDescription(),
-                expense.getDate(),
-                expense.getStatus() != null ? expense.getStatus() : "PENDING",
-                expense.getManagerId(),
-                expense.getRemarks(),
-                expense.getReceiptUrl());
-    }
-
-    @Override
-    public int update(Expense expense) {
-        String update = "UPDATE expenses SET category_id=?, amount=?, description=?, date=?, remarks=?, receipt_url=? " +
-                "WHERE id=? AND employee_id=? AND status='PENDING'";
-        return jdbcTemplate.update(update,
-                expense.getCategoryId(),
-                expense.getAmount(),
-                expense.getDescription(),
-                expense.getDate(),
-                expense.getRemarks(),
-                expense.getReceiptUrl(),
-                expense.getId(),
-                expense.getEmployeeId());
-    }
-
-    @Override
-    public int delete(Integer expenseId) {
-        String delete = "DELETE FROM expenses WHERE id = ? AND status = 'PENDING'";
-        return jdbcTemplate.update(delete, expenseId);
-    }
 
     @Override
     public int updateStatus(Integer id, String status, String remarks, Integer managerId) {
@@ -68,27 +25,14 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.update(updatests, status, remarks, id, managerId);
     }
 
-    @Override
-    public List<Expense> findAll(String status) {
-        StringBuilder searchall = new StringBuilder("SELECT * FROM expenses");
-        if (status != null && !status.isBlank()) {
-            searchall.append(" WHERE status = ? ORDER BY date DESC");
-            return jdbcTemplate.query(searchall.toString(), new BeanPropertyRowMapper<>(Expense.class), status);
-        }
-        return jdbcTemplate.query(searchall.toString(), new BeanPropertyRowMapper<>(Expense.class));
-    }
-
+    
     @Override
     public Expense findById(Integer id) {
         String findexpid = "SELECT * FROM expenses WHERE id = ?";
         return jdbcTemplate.queryForObject(findexpid, new BeanPropertyRowMapper<>(Expense.class), id);
     }
 
-    @Override
-    public List<Expense> findExpensesByManagerId(Integer managerId) {
-        String findByManager = "SELECT * FROM expenses WHERE manager_id = ? ORDER BY date DESC";
-        return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(Expense.class), managerId);
-    }
+    
 
     @Override
     public List<Category> findAllCategories() {
@@ -96,44 +40,9 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.query(getcate, new BeanPropertyRowMapper<>(Category.class));
     }
 
-    @Override
-    public String getUserRoleById(Integer userId) {
-        String getrolebyid = "SELECT r.name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
-        return jdbcTemplate.queryForObject(getrolebyid, String.class, userId);
-    }
-
-    @Override
-    public Integer getManagerIdByEmployeeId(Integer employeeId) {
-        String mngbyemp = "SELECT manager_id FROM users WHERE id = ?";
-        return jdbcTemplate.queryForObject(mngbyemp, Integer.class, employeeId);
-    }
-
-    @Override
-    public List<Expense> findByStatus(String status) {
-        String bystatus = "SELECT * FROM expenses WHERE status = ? ORDER BY date DESC";
-        return jdbcTemplate.query(bystatus, new BeanPropertyRowMapper<>(Expense.class), status);
-    }
-
-    @Override
-    public List<Expense> findByDateRange(Integer employeeId, String startDate, String endDate) {
-        String daterange = "SELECT * FROM expenses WHERE employee_id = ? AND date BETWEEN ? AND ? ORDER BY date DESC";
-        return jdbcTemplate.query(daterange, new BeanPropertyRowMapper<>(Expense.class), employeeId, startDate, endDate);
-    }
-
-    @Override
-    public Double sumApprovedExpensesByManagerId(Integer managerId) {
-        String approvedexp = "SELECT COALESCE(SUM(amount), 0.0) FROM expenses WHERE manager_id = ? AND status = 'APPROVED'";
-        return jdbcTemplate.queryForObject(approvedexp, Double.class, managerId);
-    }
 
     
-	@Override
-	public BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId, int categoryId,int month, int year) {
-		String expforcatbymon = "SELECT SUM(amount) FROM expenses " +
-                "WHERE employee_id = ? AND category_id = ? " +
-                "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED' AND status != 'PENDING'";
-        return jdbcTemplate.queryForObject(expforcatbymon, BigDecimal.class, employeeId, categoryId, month, year);
+	
 
-	}
 
 }

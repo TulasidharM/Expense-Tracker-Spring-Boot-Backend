@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
+import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,8 @@ public class ManagerExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
+    @Autowired
+    private ManagerService managerService;
 
     @Autowired
     private UserService userService;
@@ -48,7 +51,7 @@ public class ManagerExpenseController {
 
     @GetMapping("/{managerId}")
     public ResponseEntity<List<Expense>> getTeamExpenses(@PathVariable Integer managerId) {
-        List<Expense> expenses = expenseService.getExpensesByManagerId(managerId);
+        List<Expense> expenses = managerService.getExpensesByManagerId(managerId);
 
         List<Expense> enrichedExpenses = expenses.stream().map(expense -> {
             var emp = userService.getUserById(expense.getEmployeeId());
@@ -67,7 +70,7 @@ public class ManagerExpenseController {
 
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String,String>> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
-        expenseService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
+    	managerService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
         var res = new HashMap<String,String>();
         res.put("message", "Expense approved succesfully");
         return ResponseEntity.ok(res);
@@ -75,7 +78,7 @@ public class ManagerExpenseController {
 
     @PutMapping("/{id}/reject")
     public ResponseEntity<Map<String,String>> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
-        expenseService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
+    	managerService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
         var res = new HashMap<String,String>();
         res.put("message", "Expense rejected successfully");
         return ResponseEntity.ok(res);
