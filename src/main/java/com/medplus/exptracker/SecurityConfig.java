@@ -52,6 +52,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/manager/expenses/*/employeeList").hasRole("MANAGER")
 		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER")
 				
+			
 				.requestMatchers("/api/admin/add-user").hasRole("ADMIN")
 				.requestMatchers("/api/admin/get-managers").hasRole("ADMIN");
 			

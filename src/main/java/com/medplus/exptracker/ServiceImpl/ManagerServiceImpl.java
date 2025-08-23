@@ -32,6 +32,8 @@ public class ManagerServiceImpl implements ManagerService{
         return managerDAO.findExpensesByManagerId(managerId);
     }
 
+    
+//TODO get manager id from auth
     @Override
     public void approveExpense(Integer id, String remarks, Integer managerId) {
     	int rowsAffected;
@@ -50,6 +52,7 @@ public class ManagerServiceImpl implements ManagerService{
         }
     }
     
+//TODO validate remarks for the rejection
     @Override
     public void rejectExpense(Integer id, String remarks, Integer managerId) {
         int rowsAffected = managerDAO.updateStatus(id, "REJECTED", remarks, managerId);
