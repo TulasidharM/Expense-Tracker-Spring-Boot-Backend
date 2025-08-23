@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (expense.getStatus() == null || expense.getStatus().isEmpty()) {
             expense.setStatus("PENDING");
         }
-        
+       
         if(isLimitExceededByCatByEmp(expense)) {
         	employeeDAO.save(expense);
         }else {
@@ -62,6 +62,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDAO.findByEmployeeId(employeeId);
     }
     
+    
     @Override
 	public boolean isLimitExceededByCatByEmp(Expense expense) {
 		int employeeId = expense.getEmployeeId();
@@ -75,6 +76,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         expensePerCategory = expensePerCategory.add(expense.getAmount());
         List<Category> categories = expenseDAO.findAllCategories();
         
+        //TODO:use sql to find limit for the category id
+        //TODO: throw exception and handle it in global handler
         for(Category category : categories) {
         	if(categoryId == category.getId()) {
         		if(expensePerCategory.compareTo(category.getMonthly_limit()) == -1) {

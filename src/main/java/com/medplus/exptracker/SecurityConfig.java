@@ -25,6 +25,9 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+	//TODO: shorten number of endpoints
+	//TODO: login and getuser can be combined
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -47,10 +50,10 @@ public class SecurityConfig {
 				.requestMatchers("/api/manager/expenses/*").hasRole("MANAGER")
 				.requestMatchers("/api/manager/expenses/*/approvedAmounts").hasRole("MANAGER")
 				.requestMatchers("/api/manager/expenses/*/employeeList").hasRole("MANAGER")
-		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER");
+		        .requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER")
 				
 				.requestMatchers("/api/admin/add-user").hasRole("ADMIN")
-				.requestMatchers("/api/admin/get-managers").permitAll();
+				.requestMatchers("/api/admin/get-managers").hasRole("ADMIN");
 			
 		})
 		.userDetailsService(userService)

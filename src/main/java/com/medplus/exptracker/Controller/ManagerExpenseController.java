@@ -21,9 +21,8 @@ import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.ExpenseService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
-import com.medplus.exptracker.entity.User;
-
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @RestController
@@ -71,15 +70,19 @@ public class ManagerExpenseController {
     }
 
     @PutMapping("/{id}/approve")
-    public ResponseEntity<String> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String,String>> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
         managerService.approveExpense(id, expense.getRemarks(), expense.getManagerId());
-        return ResponseEntity.ok("Expense approved successfully");
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense approved successfully!");
+        return ResponseEntity.ok(res);
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<String> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String,String>> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
         managerService.rejectExpense(id, expense.getRemarks(), expense.getManagerId());
-        return ResponseEntity.ok("Expense rejected successfully");
+        var res = new HashMap<String,String>();
+        res.put("message", "Expense rejected successfully!");
+        return ResponseEntity.ok(res);
     }
     
 
@@ -141,7 +144,7 @@ public class ManagerExpenseController {
                     String categoryName = category.getName();
                     Double monthlyLimit = category.getMonthly_limit().doubleValue();
                     Double approvedAmount = categoryAmounts.getOrDefault(categoryId, 0.0);
-                    Double remainingAmount = monthlyLimit - approvedAmount;
+                    Double remainingAmount = monthlyLimit-approvedAmount;
                     
                     Map<String, Object> categoryData = new HashMap<>();
                     categoryData.put("categoryName", categoryName);

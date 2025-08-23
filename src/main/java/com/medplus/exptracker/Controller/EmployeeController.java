@@ -52,7 +52,7 @@ public class EmployeeController {
         List<Expense> expenses = employeeService.getExpensesByEmployeeId(employeeId);
         return ResponseEntity.ok(expenses);
     }
-	
+
 	@PutMapping("/update-expense")
     public ResponseEntity<Map<String,String>> updateExpense(@Valid @RequestBody Expense expense) {
 		employeeService.updateExpense(expense);

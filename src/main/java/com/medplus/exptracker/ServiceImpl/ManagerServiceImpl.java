@@ -31,7 +31,6 @@ public class ManagerServiceImpl implements ManagerService{
     public List<Expense> getExpensesByManagerId(Integer managerId) {
         return managerDAO.findExpensesByManagerId(managerId);
     }
-    
 
     @Override
     public void approveExpense(Integer id, String remarks, Integer managerId) {
@@ -50,7 +49,7 @@ public class ManagerServiceImpl implements ManagerService{
             throw new RuntimeException("Unable to approve expense. It may not exist or is not in PENDING status.");
         }
     }
-
+    
     @Override
     public void rejectExpense(Integer id, String remarks, Integer managerId) {
         int rowsAffected = managerDAO.updateStatus(id, "REJECTED", remarks, managerId);

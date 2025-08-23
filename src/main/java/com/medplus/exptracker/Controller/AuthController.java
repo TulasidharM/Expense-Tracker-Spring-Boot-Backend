@@ -42,6 +42,7 @@ public class AuthController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
 
+		//TODO: set separate service to return user with no password, use a DTO
 		User user = userService.getUserByUserName(username);
 		user.setPassword("");
 		return user;
