@@ -42,7 +42,6 @@ public class ManagerExpenseController {
 
     private Map<Integer, String> categoryIdToNameMap;
 
-
     @Autowired
     public void initCategoryMap() {
         categoryIdToNameMap = expenseService.getCategories().stream()
@@ -58,7 +57,7 @@ public class ManagerExpenseController {
             if (emp != null) {
                 expense.setEmployeeName(emp.getUsername());
             }
-            
+
             Integer catId = expense.getCategoryId();
             if (catId != null && categoryIdToNameMap != null) {
                 expense.setCategoryName(categoryIdToNameMap.getOrDefault(catId, "Unknown"));

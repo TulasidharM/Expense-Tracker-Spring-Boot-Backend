@@ -18,27 +18,16 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-
-    
-
-    
     @Override
     public Expense findById(Integer id) {
         String findexpid = "SELECT * FROM expenses WHERE id = ?";
         return jdbcTemplate.queryForObject(findexpid, new BeanPropertyRowMapper<>(Expense.class), id);
     }
-
     
-
     @Override
     public List<Category> findAllCategories() {
         String getcate = "SELECT * FROM categories";
         return jdbcTemplate.query(getcate, new BeanPropertyRowMapper<>(Category.class));
     }
-
-
-    
-	
-
 
 }

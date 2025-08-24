@@ -2,10 +2,12 @@ package com.medplus.exptracker.ServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Dao.EmployeeDAO;
 import com.medplus.exptracker.Dao.ExpenseDAO;
 import com.medplus.exptracker.Model.Category;
@@ -90,6 +92,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return false;
 	}
-
+    
+    @Override
+    public List<ExpensePerCategory> totalExpenseForCategories(int empId) {
+    	return employeeDAO.getTotalExpenseForAllCategories(empId);
+    }
+    
+    
+    
 
 }

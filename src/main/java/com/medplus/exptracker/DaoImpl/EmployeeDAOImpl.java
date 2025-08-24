@@ -2,12 +2,15 @@ package com.medplus.exptracker.DaoImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Dao.EmployeeDAO;
+import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +74,21 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 			result = new BigDecimal("0");
         }
 		return result;
-
 	}
+	
+	@Override
+	public List<ExpensePerCategory> getTotalExpenseForAllCategories(int empId){
+		String TotalExpensesForAllCategories= 
+				"SELECT c.name as name, COALESCE(SUM(e.amount), 0) as totalExpense " +
+		        "from categories c " +
+		        "LEFT JOIN expenses e ON c.id = e.category_id " +
+		        "AND MONTH(e.date) = MONTH(CURRENT_DATE) " +
+		        "AND e.employee_id = ? " +
+		        "AND e.status = 'APPROVED' " +
+		        "GROUP BY c.id, c.name";
+		
+		List<ExpensePerCategory> result = jdbcTemplate.query(TotalExpensesForAllCategories,new BeanPropertyRowMapper<>(ExpensePerCategory.class),empId);
+		return result;
+	}
+	
 }

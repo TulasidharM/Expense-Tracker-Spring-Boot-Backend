@@ -2,7 +2,7 @@ package com.medplus.exptracker.DaoImpl;
 
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Model.Expense;
-import com.medplus.exptracker.entity.User;
+import com.medplus.exptracker.Model.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

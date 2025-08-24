@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
-import com.medplus.exptracker.entity.User;
+import com.medplus.exptracker.Model.User;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -44,14 +44,14 @@ public class AdminController {
 		user.setUsername(json.get("username"));
 		user.setPassword(encryptedPassword);
 		
-		user.setRoleId(Integer.parseInt(json.get("roleId")));
+		user.setRole_id(Integer.parseInt(json.get("roleId")));
 		
-		if(user.getRoleId() == 2) {
-			user.setManagerId(null);
+		if(user.getRole_id() == 2) {
+			user.setManager_id(null);
 		} else if(json.get("managerId") == "0") {
 			throw new RuntimeException("You need to assign a manager to the employee");
 		} else {
-			user.setManagerId(Integer.parseInt(json.get("managerId")));			
+			user.setManager_id(Integer.parseInt(json.get("managerId")));			
 		}
 		
 		userService.addUser(user);

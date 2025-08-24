@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.EmployeeService;
 import com.medplus.exptracker.Service.ExpenseService;
@@ -71,5 +72,11 @@ public class EmployeeController {
 		return ResponseEntity.ok(res);
 	}
 	
+	@GetMapping("/get-expense-per-category/{empId}")
+	public List<ExpensePerCategory> getTotalExpenseForCategories(@PathVariable int empId){
+		List<ExpensePerCategory> res;
+		res = employeeService.totalExpenseForCategories(empId);
+		return res;
+	}
 	
 }

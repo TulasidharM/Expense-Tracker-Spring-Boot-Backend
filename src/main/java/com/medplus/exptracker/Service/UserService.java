@@ -8,24 +8,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.medplus.exptracker.Repository.UserRepository;
-import com.medplus.exptracker.entity.User;
+import com.medplus.exptracker.Dao.UserDAO;
+import com.medplus.exptracker.Model.User;
 
+
+//TODO: Add first name and last name or something else to have non-unique user details
 @Service
 public class UserService implements UserDetailsService {
     
+    
     @Autowired
-    private UserRepository userRepository;
+    private UserDAO userDAO;
+    
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            
+    	User user = userDAO.findByUsername(username)
+        		.orElseThrow(() ->{ System.out.println("Could'nt find user");throw new UsernameNotFoundException("User not found");} );//new UsernameNotFoundException("User not found"));
+        
         return org.springframework.security.core.userdetails.User
             .withUsername(user.getUsername())
             .password(user.getPassword())
-            .roles(getRoleByRoleId(user.getRoleId()))
+            .roles(getRoleByRoleId(user.getRole_id()))
             .build();
     }
     
@@ -39,19 +43,20 @@ public class UserService implements UserDetailsService {
         }
     }
     
+    //Use DTO to remove password and send it 
     public User getUserByUserName(String username) throws UsernameNotFoundException{
-    	User user = userRepository.findByUsername(username)
+    	User user = userDAO.findByUsername(username)
     	            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     	return user;
     }
     
     
     public User getUserById(Integer userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<User> userOpt = userDAO.getUserById(userId);
         return userOpt.orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
     }
     
     public void addUser(User user) {
-    	userRepository.save(user);
+    	userDAO.addUser(user);
     }
 }

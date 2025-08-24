@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.Service.UserService;
-import com.medplus.exptracker.entity.User;
+import com.medplus.exptracker.Model.User;
 
 @RestController
 @CrossOrigin(origins = "*",allowedHeaders = "*")
