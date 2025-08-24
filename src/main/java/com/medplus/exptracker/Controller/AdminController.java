@@ -1,5 +1,6 @@
 package com.medplus.exptracker.Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,13 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medplus.exptracker.Service.AdminService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
+import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
+import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 
 @RestController
@@ -27,6 +33,8 @@ public class AdminController {
 	UserService userService;
 	@Autowired
 	ManagerService managerService;
+	@Autowired
+	AdminService adminService;
 		
 	@PostMapping("/add-user")
 	public ResponseEntity<Map<String,String>> addNewUser(@RequestBody Map<String, String> json){
@@ -65,6 +73,21 @@ public class AdminController {
     	var result = managerService.getAllManager();
         return result;
     }
+	
+	@GetMapping("/expenses")
+    public List<Expense> getExpenses(
+            @RequestParam(defaultValue = "0") int employeeId,
+            @RequestParam(defaultValue = "0") int managerId,
+            @RequestParam(defaultValue = "0") int categoryId,
+            @RequestParam(defaultValue = "0") int month) {
+	 
+        return adminService.getExpensesWithFilters(managerId, employeeId, categoryId, month);
+    }
+	
+	@GetMapping("/employees")
+	public List<EmployeeForAdminDTO> getEmployees(){
+		return adminService.getAllEmployees();
+	}
 	
 	
 }

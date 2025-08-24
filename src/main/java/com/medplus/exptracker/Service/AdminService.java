@@ -1,8 +1,12 @@
 package com.medplus.exptracker.Service;
 
-public interface AdminService {
-	void createUser(String username , String password);
-	void createManager(String username,String password);
-	
-	
+import java.util.List;
+
+import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
+import com.medplus.exptracker.Model.Expense;
+
+public interface AdminService {	
+	List<Expense> getExpensesWithFilters(int managerId ,int  employeeId ,int categoryId,int monthValue);
+	List<EmployeeForAdminDTO> getAllEmployees();
 }
+
