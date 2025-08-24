@@ -58,7 +58,7 @@ public class ManagerServiceImpl implements ManagerService{
         int rowsAffected = managerDAO.updateStatus(id, "REJECTED", remarks, managerId);
         if (rowsAffected == 0) {
             throw new RuntimeException("Unable to reject expense. It may not exist or is not in PENDING status.");
-        }
+        }	
     }
 
 

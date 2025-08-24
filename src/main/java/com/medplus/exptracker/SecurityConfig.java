@@ -50,10 +50,10 @@ public class SecurityConfig {
 				
 				.requestMatchers("/api/manager/expenses/*/approve").hasRole("MANAGER")
 				.requestMatchers("/api/manager/expenses/*/reject").hasRole("MANAGER")
-				.requestMatchers("/api/manager/expenses/*").hasRole("MANAGER")
-				.requestMatchers("/api/manager/expenses/*/approvedAmounts").hasRole("MANAGER")
-				.requestMatchers("/api/manager/expenses/*/employeeList").hasRole("MANAGER")
-				.requestMatchers("/api/manager/expenses/*/categoryWiseApproved").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/approvedAmounts").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/employeeList").hasRole("MANAGER")
+				.requestMatchers("/api/manager/expenses/categoryWiseApproved").hasRole("MANAGER")
 
 //		        .requestMatchers("/api/manager/expenses/**").hasRole("MANAGER")
 

@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.medplus.exptracker.Dao.UserDAO;
-import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +40,8 @@ public class UserDAOImpl implements UserDAO{
 
 	@Override
 	public Optional<User> getUserById(Integer userId) {
-		String getUserByIdSql = "SELECT (username,role_id,manager_id) from users where id = ?";
-		User user= jdbcTemplate.queryForObject(getUserByIdSql, User.class,userId);
+		String getUserByIdSql = "SELECT * FROM users WHERE id = ?";
+		User user= jdbcTemplate.queryForObject(getUserByIdSql, new BeanPropertyRowMapper<>(User.class), userId);
 		return Optional.ofNullable(user);
 	}
 	
