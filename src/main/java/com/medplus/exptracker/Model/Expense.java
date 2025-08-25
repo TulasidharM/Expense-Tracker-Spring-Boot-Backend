@@ -7,6 +7,8 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +34,7 @@ public class Expense {
     @NotBlank(message = "Description is required")
     private String description;
 
+    @PastOrPresent(message="Date must be today or past dates")
     private LocalDate date;
 
     private String status;
@@ -43,6 +46,9 @@ public class Expense {
 
     private String receiptUrl;
 
+    
+    //Dasu/Vardhan: Remove employee name and category name , this does not reflect database
+    //This means using DTO for whatever thing you are using this employeeName and cateogryName for
     private String employeeName;
 
     private String categoryName;

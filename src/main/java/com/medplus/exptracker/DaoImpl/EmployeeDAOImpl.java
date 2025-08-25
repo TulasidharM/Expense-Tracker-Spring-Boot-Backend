@@ -2,34 +2,45 @@ package com.medplus.exptracker.DaoImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Dao.EmployeeDAO;
-import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
+import com.medplus.exptracker.Util.AuthUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class EmployeeDAOImpl implements EmployeeDAO{
 	private final JdbcTemplate jdbcTemplate;
 	
+	@Autowired
+	private AuthUtil authUtil;
 	@Override
-    public List<Expense> findByEmployeeId(Integer employeeId) {
-        String findemp = "SELECT * FROM expenses WHERE employee_id = ? ORDER BY date DESC";
-        return jdbcTemplate.query(findemp, new BeanPropertyRowMapper<>(Expense.class), employeeId);
+    public List<ExpenseForEmployeeDTO> findByEmployeeId(Integer employeeId) {
+        String findemp = "SELECT e.id,c.id as categoryId,c.name as categoryName , e.date,e.amount,e.description,e.remarks,e.status FROM expenses e "
+        				+ "LEFT JOIN categories c on e.category_id = c.id " 
+        				+ "WHERE employee_id = ?";
+        
+        return jdbcTemplate.query(findemp, new BeanPropertyRowMapper<>(ExpenseForEmployeeDTO.class), employeeId);
     }
 	
 	@Override
     public void save(Expense expense) {
         String save = "INSERT INTO expenses (employee_id, category_id, amount, description, date, status, manager_id, remarks, receipt_url) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        log.info("Trying to add expense : "+ expense);
         jdbcTemplate.update(save,
                 expense.getEmployeeId(),
                 expense.getCategoryId(),
@@ -46,7 +57,10 @@ public class EmployeeDAOImpl implements EmployeeDAO{
     public int update(Expense expense) {
         String update = "UPDATE expenses SET category_id=?, amount=?, description=?, date=?, remarks=?, receipt_url=? " +
                 "WHERE id=? AND employee_id=? AND status='PENDING'";
-        return jdbcTemplate.update(update,
+       
+       
+        
+       return jdbcTemplate.update(update,
                 expense.getCategoryId(),
                 expense.getAmount(),
                 expense.getDescription(),
