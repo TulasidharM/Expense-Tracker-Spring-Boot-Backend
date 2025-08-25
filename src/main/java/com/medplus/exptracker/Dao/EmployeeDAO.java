@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
-import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Model.Expense;
 
 public interface EmployeeDAO {

@@ -52,7 +52,7 @@ public class ManagerExpenseController {
                 .collect(Collectors.toMap(Category::getId, Category::getName));
     }
 
-    //Vardhan: Dont use POJO any where here only use DTO
+    //Vardhan: Don't use POJO any where here only use DTO
     
     @GetMapping
     public ResponseEntity<List<Expense>> getTeamExpenses() {

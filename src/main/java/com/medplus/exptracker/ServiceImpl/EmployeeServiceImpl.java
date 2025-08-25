@@ -11,12 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.UpdateExpenseDTO;
 import com.medplus.exptracker.Dao.EmployeeDAO;
 import com.medplus.exptracker.Dao.ExpenseDAO;
 import com.medplus.exptracker.Exceptions.DBException;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
 import com.medplus.exptracker.Model.Expense;
+import com.medplus.exptracker.Model.User;
 import com.medplus.exptracker.Service.EmployeeService;
+import com.medplus.exptracker.Util.AuthUtil;
 
 
 @Service
@@ -26,30 +29,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 	EmployeeDAO employeeDAO;
 	@Autowired
 	ExpenseDAO expenseDAO;
+	@Autowired
+	AuthUtil authUtil;
 	
 	@Override
-    public void createExpense(ExpenseDTO expenseDto) throws MonthlyLimitException {
-		//FIXME: map DTO to an expense POJO then use that pojo to save;
-		
+    public void createExpense(ExpenseDTO expenseDto) throws MonthlyLimitException {		
 		Expense expense = new Expense();
 		BeanUtils.copyProperties(expenseDto, expense);
 		
-		System.out.println("Copied Expense POJO : " + expense);
-//        if (expense.getStatus() == null || expense.getStatus().isEmpty()) {
-//            expense.setStatus("PENDING");
-//        }
-//        
-//        if(isLimitExceededByCatByEmp(expense)) {
-//        	employeeDAO.save(expense);
-//        }else {
-//            throw new MonthlyLimitException();
-//        }
-//        
+		User user= authUtil.getCurrentUser();
+		expense.setEmployeeId(user.getId());
+		expense.setManagerId(user.getManager_id());
+		
+        
+        if(isLimitExceededByCatByEmp(expense)) {
+        	employeeDAO.save(expense);
+        }else {
+            throw new MonthlyLimitException();
+        }
     }
 	
 	@Override
-    public void updateExpense(Expense expense) throws MonthlyLimitException,DBException{
+    public void updateExpense(UpdateExpenseDTO expenseDto) throws MonthlyLimitException,DBException{
     	int rowsAffected; 
+    	
+    	Expense expense = new Expense();
+		BeanUtils.copyProperties(expenseDto, expense);
+		
+		User user= authUtil.getCurrentUser();
+		expense.setEmployeeId(user.getId());		
+		
         if(isLimitExceededByCatByEmp(expense)) {
         	rowsAffected = employeeDAO.update(expense);
         } else {
@@ -60,9 +69,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+	
+	//Dasu: Validate if the expense ID belongs to the user logged in currently
     @Override
     public void deleteExpense(Integer expenseId) throws DBException{
         int rowsAffected = employeeDAO.delete(expenseId);
+        
         if (rowsAffected == 0) {
             throw new DBException("Unable to delete expense. It may not exist or is not in PENDING status.");
         }
@@ -99,8 +111,5 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<ExpensePerCategory> totalExpenseForCategories(int empId) {
     	return employeeDAO.getTotalExpenseForAllCategories(empId);
     }
-    
-    
-    
 
 }

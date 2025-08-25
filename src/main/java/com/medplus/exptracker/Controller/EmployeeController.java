@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.UpdateExpenseDTO;
 import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Exceptions.DBException;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
@@ -72,9 +73,7 @@ public class EmployeeController {
     }
 
 	@PutMapping("/update-expense")
-    public ResponseEntity<Map<String,String>> updateExpense(@Valid @RequestBody Expense expense) throws MonthlyLimitException, DBException {
-		
-		
+    public ResponseEntity<Map<String,String>> updateExpense(@Valid @RequestBody UpdateExpenseDTO expense) throws MonthlyLimitException, DBException {
 		employeeService.updateExpense(expense);
 		
 		int empId = authUtil.getCurrentUser().getId();

@@ -25,7 +25,6 @@ public class UpdateExpenseDTO {
 	@PastOrPresent(message="Date must be today or past dates")
     private LocalDate date;
 
-
 	@NotNull(message = "Amount is required")
     @DecimalMin(value = "1.0", message = "Amount must be greater than 0")
     @DecimalMax(value = "50000.0", message = "Amount cannot be greater than 50,000")
@@ -33,8 +32,6 @@ public class UpdateExpenseDTO {
 	
 	@NotBlank(message = "Description is required")
     private String description;
-	
-	private String remarks;
 	
 	private String receiptUrl;
 }

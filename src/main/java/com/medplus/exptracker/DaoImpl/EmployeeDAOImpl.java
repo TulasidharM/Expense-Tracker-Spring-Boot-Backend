@@ -55,17 +55,14 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	
 	@Override
     public int update(Expense expense) {
-        String update = "UPDATE expenses SET category_id=?, amount=?, description=?, date=?, remarks=?, receipt_url=? " +
+        String update = "UPDATE expenses SET category_id=?, amount=?, description=?, date=?, receipt_url=? " +
                 "WHERE id=? AND employee_id=? AND status='PENDING'";
-       
-       
         
        return jdbcTemplate.update(update,
                 expense.getCategoryId(),
                 expense.getAmount(),
                 expense.getDescription(),
                 expense.getDate(),
-                expense.getRemarks(),
                 expense.getReceiptUrl(),
                 expense.getId(),
                 expense.getEmployeeId());
