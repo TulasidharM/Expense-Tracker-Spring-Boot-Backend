@@ -1,5 +1,6 @@
 package com.medplus.exptracker.DaoImpl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
+import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Dao.AdminDAO;
 import com.medplus.exptracker.Model.Expense;
 
@@ -43,7 +45,23 @@ public class AdminDAOImpl implements AdminDAO {
     
     @Override
     public List<EmployeeForAdminDTO> fetchAllUsers() {
-		String getEmployees= "SELECT users.username , users.id FROM users WHERE role_id  = 3";
+		String getEmployees= "SELECT users.username,users.id,users.manager_id FROM users WHERE role_id  = 3";
 		return jdbcTemplate.query(getEmployees,new BeanPropertyRowMapper<>(EmployeeForAdminDTO.class));
     }
+    
+    @Override
+    public BigDecimal fetchExpenseForCurrentMonth() {
+    	String getEmployees= "SELECT SUM(expenses.amount) FROM expenses "
+    						+ "WHERE status='APPROVED' AND MONTH(date) = MONTH(CURRENT_DATE)";
+		return jdbcTemplate.queryForObject(getEmployees,BigDecimal.class);
+    }
+
+	@Override
+	public List<ExpensePerCategory> fetchExpensesForCategories() {
+		String getEmployees= "SELECT SUM(expenses.amount) as totalExpense ,categories.name as name "
+				+ "FROM expenses LEFT JOIN categories ON categories.id = expenses.category_id "
+				+ "WHERE status='APPROVED' AND MONTH(date) = MONTH(CURRENT_DATE) "
+				+ "GROUP BY categories.id";
+		return jdbcTemplate.query(getEmployees,new BeanPropertyRowMapper<>(ExpensePerCategory.class));
+	}
 }

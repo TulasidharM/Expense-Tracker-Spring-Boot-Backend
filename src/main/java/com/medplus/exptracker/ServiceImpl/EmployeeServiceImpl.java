@@ -2,15 +2,14 @@ package com.medplus.exptracker.ServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Dao.EmployeeDAO;
 import com.medplus.exptracker.Dao.ExpenseDAO;
-import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.EmployeeService;
 
@@ -64,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDAO.findByEmployeeId(employeeId);
     }
     
-    
+    @Transactional
     @Override
 	public boolean isLimitExceededByCatByEmp(Expense expense) {
 		int employeeId = expense.getEmployeeId();
@@ -72,25 +71,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         int year = expense.getDate().getYear();
         int month = expense.getDate().getMonthValue();
         
-        
         BigDecimal expensePerCategory = employeeDAO.getTotalExpenseByCategoryByEmployee(employeeId, categoryId, month,year);
-        
         expensePerCategory = expensePerCategory.add(expense.getAmount());
-        List<Category> categories = expenseDAO.findAllCategories();
-        
-        //TODO:use sql to find limit for the category id
-        //TODO: throw exception and handle it in global handler
-        for(Category category : categories) {
-        	if(categoryId == category.getId()) {
-        		if(expensePerCategory.compareTo(category.getMonthly_limit()) == -1) {
-        			return true;
-        		}
-        		else {
-        			return false;
-        		}
-        	}
-        }
-        return false;
+        BigDecimal maxExpenseForCategory = expenseDAO.findMaxExpenseForCategory(categoryId);
+
+		if(expensePerCategory.compareTo(maxExpenseForCategory) == -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	
 	}
     
     @Override

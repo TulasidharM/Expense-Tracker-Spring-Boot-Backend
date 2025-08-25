@@ -33,7 +33,6 @@ public class ManagerServiceImpl implements ManagerService{
     }
 
     
-//TODO get manager id from auth
     @Override
     public void approveExpense(Integer id, String remarks, Integer managerId) {
     	int rowsAffected;
@@ -52,9 +51,10 @@ public class ManagerServiceImpl implements ManagerService{
         }
     }
     
-//TODO validate remarks for the rejection
+    //TODO validate remarks for the rejection
     @Override
     public void rejectExpense(Integer id, String remarks, Integer managerId) {
+    	
         int rowsAffected = managerDAO.updateStatus(id, "REJECTED", remarks, managerId);
         if (rowsAffected == 0) {
             throw new RuntimeException("Unable to reject expense. It may not exist or is not in PENDING status.");

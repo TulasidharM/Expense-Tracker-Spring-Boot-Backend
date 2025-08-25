@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class EmployeeForAdminDTO {
 	String username;
 	String id;
+	int manager_id;
 }

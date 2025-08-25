@@ -1,6 +1,6 @@
 package com.medplus.exptracker.Controller;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +20,7 @@ import com.medplus.exptracker.Service.AdminService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
+import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 
@@ -87,6 +87,19 @@ public class AdminController {
 	@GetMapping("/employees")
 	public List<EmployeeForAdminDTO> getEmployees(){
 		return adminService.getAllEmployees();
+	}
+	
+	@GetMapping("/get-total-expense")
+	public ResponseEntity<Map<String,BigDecimal>> getTotalExpenseForCurrentMonth(){
+		
+		var res = new HashMap<String,BigDecimal>();
+		res.put("totalExpense",adminService.getExpenseForCurrentMonth());
+		return ResponseEntity.ok(res);
+	}
+	
+	@GetMapping("/get-expense-per-category")
+	public List<ExpensePerCategory> getTotalExpensePerCategoryForCurrentMonth(){		
+		return adminService.getExpenseForCategories();
 	}
 	
 	

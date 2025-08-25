@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.Service.UserService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.medplus.exptracker.Model.User;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 public class AuthController {
@@ -44,6 +48,7 @@ public class AuthController {
 
 		//TODO: set separate service to return user with no password, use a DTO
 		User user = userService.getUserByUserName(username);
+		log.info("Asked for user details , Sending back user details to store: " + user);
 		user.setPassword("");
 		return user;
 	}

@@ -37,7 +37,7 @@ public class UserDAOImpl implements UserDAO{
 										user.getManager_id());
 		//TODO: Create and throw a custom exception if rows effected is 0
 	}
-
+	
 	@Override
 	public Optional<User> getUserById(Integer userId) {
 		String getUserByIdSql = "SELECT * FROM users WHERE id = ?";

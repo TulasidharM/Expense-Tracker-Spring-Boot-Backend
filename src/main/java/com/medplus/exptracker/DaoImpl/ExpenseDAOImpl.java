@@ -1,5 +1,6 @@
 package com.medplus.exptracker.DaoImpl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -29,5 +30,10 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         String getcate = "SELECT * FROM categories";
         return jdbcTemplate.query(getcate, new BeanPropertyRowMapper<>(Category.class));
     }
-
+    
+    @Override
+    public BigDecimal findMaxExpenseForCategory(int categoryId) {
+    	String getMaxForCategory = "SELECT monthly_limit FROM categories WHERE id = ?";
+    	return jdbcTemplate.queryForObject(getMaxForCategory, BigDecimal.class,categoryId);
+    }
 }
