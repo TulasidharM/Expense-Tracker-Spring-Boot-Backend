@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
@@ -77,9 +78,9 @@ public class ManagerExpenseController {
         }).collect(Collectors.toList());
         return ResponseEntity.ok(enrichedExpenses);
     }
-
+//Vardhan validate weather the expense id is mapped to that particular manager or not
     @PutMapping("/{id}/approve")
-    public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
@@ -92,7 +93,7 @@ public class ManagerExpenseController {
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<Map<String, String>> rejectExpense(@PathVariable Integer id, @RequestBody Expense expense) {
+    public ResponseEntity<Map<String, String>> rejectExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
