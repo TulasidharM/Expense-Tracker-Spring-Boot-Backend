@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Model.Expense;
+import com.medplus.exptracker.Model.User;
 import com.medplus.exptracker.Service.EmployeeService;
 import com.medplus.exptracker.Service.ExpenseService;
 import com.medplus.exptracker.Service.ManagerService;
-import com.medplus.exptracker.Model.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,10 +51,11 @@ public class ManagerServiceImpl implements ManagerService{
         }
     }
     
-    //TODO validate remarks for the rejection
     @Override
     public void rejectExpense(Integer id, String remarks, Integer managerId) {
-    	
+        if(remarks == null || remarks.trim().isEmpty()) {
+            throw new RuntimeException("Remark cannot be empty for rejecting an expense");
+        }
         int rowsAffected = managerDAO.updateStatus(id, "REJECTED", remarks, managerId);
         if (rowsAffected == 0) {
             throw new RuntimeException("Unable to reject expense. It may not exist or is not in PENDING status.");
