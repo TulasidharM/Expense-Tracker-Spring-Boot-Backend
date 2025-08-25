@@ -33,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ManagerExpenseController {
 
+	
+	
     @Autowired
     private ExpenseService expenseService;
 
@@ -50,6 +52,8 @@ public class ManagerExpenseController {
                 .collect(Collectors.toMap(Category::getId, Category::getName));
     }
 
+    //Vardhan: Dont use POJO any where here only use DTO
+    
     @GetMapping
     public ResponseEntity<List<Expense>> getTeamExpenses() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
