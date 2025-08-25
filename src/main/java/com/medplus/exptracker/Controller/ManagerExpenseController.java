@@ -168,15 +168,11 @@ public class ManagerExpenseController {
                 .map(category -> {
                     Integer categoryId = category.getId();
                     String categoryName = category.getName();
-                    Double monthlyLimit = category.getMonthly_limit().doubleValue();
                     Double approvedAmount = categoryAmounts.getOrDefault(categoryId, 0.0);
-                    Double remainingAmount = monthlyLimit - approvedAmount;
 
                     Map<String, Object> categoryData = new HashMap<>();
                     categoryData.put("categoryName", categoryName);
                     categoryData.put("approvedAmount", approvedAmount);
-                    categoryData.put("remainingAmount", remainingAmount);
-                    categoryData.put("monthlyLimit", monthlyLimit);
 
                     return categoryData;
                 })
