@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +21,9 @@ import com.medplus.exptracker.Service.AdminService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.FilteredExpenseDTO;
 import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.DTO.RegisterUserDTO;
 import com.medplus.exptracker.Model.Expense;
@@ -72,7 +70,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/expenses")
-    public List<Expense> getExpenses(
+	public List<FilteredExpenseDTO> getExpenses(
             @RequestParam(defaultValue = "0") int employeeId,
             @RequestParam(defaultValue = "0") int managerId,
             @RequestParam(defaultValue = "0") int categoryId,
@@ -80,6 +78,8 @@ public class AdminController {
 	 
         return adminService.getExpensesWithFilters(managerId, employeeId, categoryId, month);
     }
+	
+	
 	
 	@GetMapping("/employees")
 	public List<EmployeeForAdminDTO> getEmployees(){

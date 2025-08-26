@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
-import com.medplus.exptracker.Model.Expense;
+import com.medplus.exptracker.DTO.FilteredExpenseDTO;
 
 public interface AdminService {	
-	List<Expense> getExpensesWithFilters(int managerId ,int  employeeId ,int categoryId,int monthValue);
+	List<FilteredExpenseDTO> getExpensesWithFilters(int managerId ,int  employeeId ,int categoryId,int monthValue);
 	List<EmployeeForAdminDTO> getAllEmployees();
 	BigDecimal getExpenseForCurrentMonth();
 	List<ExpensePerCategory> getExpenseForCategories();

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.FilteredExpenseDTO;
 import com.medplus.exptracker.Dao.AdminDAO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Service.AdminService;
@@ -19,9 +20,10 @@ public class AdminServiceImpl implements AdminService{
 	AdminDAO adminDAO;
 	
 	@Override
-	public List<Expense> getExpensesWithFilters(int managerId, int employeeId, int categoryId, int monthValue) {
+	public List<FilteredExpenseDTO> getExpensesWithFilters(int managerId, int employeeId, int categoryId, int monthValue) {
 		
 		return adminDAO.fetchExpensesWithFilters(managerId, employeeId, categoryId, monthValue);
+		
 	}
 	
 	@Override

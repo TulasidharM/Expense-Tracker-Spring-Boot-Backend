@@ -78,6 +78,7 @@ public class ManagerExpenseController {
         }).collect(Collectors.toList());
         return ResponseEntity.ok(enrichedExpenses);
     }
+    
 //Vardhan validate weather the expense id is mapped to that particular manager or not
     
     @PutMapping("/{id}/approve")

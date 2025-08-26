@@ -86,7 +86,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
         }
 		return result;
 	}
-	
+
 	@Override
 	public List<ExpensePerCategory> getTotalExpenseForAllCategories(int empId){
 		String TotalExpensesForAllCategories= 
