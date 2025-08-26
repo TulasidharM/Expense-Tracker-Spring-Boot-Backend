@@ -10,8 +10,9 @@ import com.medplus.exptracker.Model.Expense;
 public interface EmployeeDAO {
 	public List<ExpenseForEmployeeDTO> findByEmployeeId(Integer employeeId);
 	 public void save(Expense expense);
-	 public int delete(Integer expenseId);
+	 int update(Expense expense);
+	 int delete(Integer expenseId, Integer employeeId);
+	 
 	 public BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId, int categoryId,int month, int year);
 	 List<ExpensePerCategory> getTotalExpenseForAllCategories(int empId);
-	 int update(Expense expense);
 }

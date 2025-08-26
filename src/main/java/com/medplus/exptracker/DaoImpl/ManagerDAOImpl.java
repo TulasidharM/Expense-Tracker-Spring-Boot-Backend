@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
@@ -30,10 +31,10 @@ public class ManagerDAOImpl implements ManagerDAO{
         return jdbcTemplate.update(updatests, expense.getStatus(), expense.getRemarks(), expense.getId(), expense.getManagerId());
     }
 
-    @Override
-    public List<User> fetchAllManagers() {
-        String fetchAllManagers = "SELECT * FROM users WHERE role_id=?";
-        return jdbcTemplate.query(fetchAllManagers, new BeanPropertyRowMapper<>(User.class), 2);
-    }
+	@Override
+	public List<ManagerForAdminDTO> fetchAllManagers() {
+		String fetchAllManagers = "SELECT id,username FROM users WHERE role_id=?";
+		return jdbcTemplate.query(fetchAllManagers,new BeanPropertyRowMapper<>(ManagerForAdminDTO.class),2);
+	}
 	
 }

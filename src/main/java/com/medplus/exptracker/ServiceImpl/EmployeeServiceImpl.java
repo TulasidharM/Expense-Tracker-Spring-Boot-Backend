@@ -69,11 +69,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-	
-	//Dasu: Validate if the expense ID belongs to the user logged in currently
     @Override
     public void deleteExpense(Integer expenseId) throws DBException{
-        int rowsAffected = employeeDAO.delete(expenseId);
+    	int userId = authUtil.getCurrentUser().getId();
+        int rowsAffected = employeeDAO.delete(expenseId,userId);
         
         if (rowsAffected == 0) {
             throw new DBException("Unable to delete expense. It may not exist or is not in PENDING status.");
@@ -104,7 +103,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		else {
 			return false;
 		}
-	
 	}
     
     @Override

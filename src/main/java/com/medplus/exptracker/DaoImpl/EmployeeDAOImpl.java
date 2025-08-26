@@ -69,9 +69,9 @@ public class EmployeeDAOImpl implements EmployeeDAO{
     }
 	
 	@Override
-    public int delete(Integer expenseId) {
-        String delete = "DELETE FROM expenses WHERE id = ? AND status = 'PENDING'";
-        return jdbcTemplate.update(delete, expenseId);
+    public int delete(Integer expenseId,Integer employeeId) {
+        String delete = "DELETE FROM expenses WHERE id = ? and employee_id = ? AND status = 'PENDING'";
+        return jdbcTemplate.update(delete, expenseId,employeeId);
     }
 	
 	@Override

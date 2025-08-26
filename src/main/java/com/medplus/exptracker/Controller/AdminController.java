@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.medplus.exptracker.Service.AdminService;
 import com.medplus.exptracker.Service.ManagerService;
 import com.medplus.exptracker.Service.UserService;
+
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
+
 import com.medplus.exptracker.DTO.EmployeeForAdminDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
+import com.medplus.exptracker.DTO.ManagerForAdminDTO;
+import com.medplus.exptracker.DTO.RegisterUserDTO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 
@@ -37,39 +44,29 @@ public class AdminController {
 	AdminService adminService;
 		
 	@PostMapping("/add-user")
-	public ResponseEntity<Map<String,String>> addNewUser(@RequestBody Map<String, String> json){
+	public ResponseEntity<Map<String,String>> addNewUser(@RequestBody RegisterUserDTO user){
 		
-		System.out.println(json.get("username"));
-		User user = new User();
-		
-		
+
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-		String encryptedPassword = json.get("password");
-		encryptedPassword=passwordEncoder.encode(encryptedPassword);
-
-		
-		user.setUsername(json.get("username"));
-		user.setPassword(encryptedPassword);
-		
-		user.setRole_id(Integer.parseInt(json.get("roleId")));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		if(user.getRole_id() == 2) {
 			user.setManager_id(null);
-		} else if(json.get("managerId") == "0") {
+		} else if(user.getManager_id() == 0 || user.getManager_id() == null) {
 			throw new RuntimeException("You need to assign a manager to the employee");
-		} else {
-			user.setManager_id(Integer.parseInt(json.get("managerId")));			
 		}
 		
-		userService.addUser(user);
+		User registerUser = new User();
+		BeanUtils.copyProperties(user, registerUser);
+		
+		userService.addUser(registerUser);
 		var res = new HashMap<String,String>();
         res.put("message", "User Created Succesfully!");
         return ResponseEntity.ok(res);
 	}
 	
 	@GetMapping("/get-managers")
-    public List<User> getAllManagers() {
+    public List<ManagerForAdminDTO> getAllManagers() {
     	var result = managerService.getAllManager();
         return result;
     }

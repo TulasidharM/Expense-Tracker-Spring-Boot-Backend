@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
@@ -89,10 +90,11 @@ public class ManagerServiceImpl implements ManagerService {
         }
     }
 
-    @Override
-    public List<User> getAllManager() {
-        List<User> managers;
-        managers = managerDAO.fetchAllManagers();
-        return managers;
-    }
+
+	@Override
+	public List<ManagerForAdminDTO> getAllManager() {
+		List<ManagerForAdminDTO> managers;
+		managers = managerDAO.fetchAllManagers();
+ 		return managers;
+	}
 }

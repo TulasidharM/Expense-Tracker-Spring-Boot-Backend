@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ManagerForAdminDTO {
-	private Integer id;
+@NoArgsConstructor
+public class RegisterUserDTO {
 	private String username;
+	private String password;
+	private Integer manager_id;
+	private Integer role_id;
 }

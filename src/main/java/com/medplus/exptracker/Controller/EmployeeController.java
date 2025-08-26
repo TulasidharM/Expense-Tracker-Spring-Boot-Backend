@@ -25,7 +25,6 @@ import com.medplus.exptracker.DTO.UpdateExpenseDTO;
 import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Exceptions.DBException;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
-import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 import com.medplus.exptracker.Service.EmployeeService;
 import com.medplus.exptracker.Service.ExpenseService;
@@ -94,7 +93,10 @@ public class EmployeeController {
 	@GetMapping("/get-expense-per-category/{empId}")
 	public List<ExpensePerCategory> getTotalExpenseForCategories(@PathVariable int empId){
 		List<ExpensePerCategory> res;
+		log.info("Got employee id to get per category amonuts : " +empId);
 		res = employeeService.totalExpenseForCategories(empId);
+		
+		
 		return res;
 	}
 	
