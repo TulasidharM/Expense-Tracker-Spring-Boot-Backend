@@ -54,7 +54,6 @@ public class ManagerExpenseController {
                 .collect(Collectors.toMap(Category::getId, Category::getName));
     }
 
-    //Vardhan: Don't use POJO any where here only use DTO
     
     @GetMapping
     public ResponseEntity<List<ManagerExpenseDTO>> getTeamExpenses() {
