@@ -19,4 +19,5 @@ public class ExpenseForEmployeeDTO {
     private String description;
     private String remarks;
     private String status;
+    private String receiptUrl;
 }

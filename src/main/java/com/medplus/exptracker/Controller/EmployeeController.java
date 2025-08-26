@@ -96,7 +96,6 @@ public class EmployeeController {
 		log.info("Got employee id to get per category amonuts : " +empId);
 		res = employeeService.totalExpenseForCategories(empId);
 		
-		
 		return res;
 	}
 	

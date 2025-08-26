@@ -28,7 +28,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	private AuthUtil authUtil;
 	@Override
     public List<ExpenseForEmployeeDTO> findByEmployeeId(Integer employeeId) {
-        String findemp = "SELECT e.id,c.id as categoryId,c.name as categoryName , e.date,e.amount,e.description,e.remarks,e.status FROM expenses e "
+        String findemp = "SELECT e.id,c.id as categoryId,c.name as categoryName , e.date,e.amount,e.description,e.remarks,e.status,e.receipt_url as receiptUrl FROM expenses e "
         				+ "LEFT JOIN categories c on e.category_id = c.id " 
         				+ "WHERE employee_id = ?";
         

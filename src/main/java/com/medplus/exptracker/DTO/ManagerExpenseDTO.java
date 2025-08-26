@@ -43,5 +43,6 @@ public class ManagerExpenseDTO {
 	private String employeeName;
 
     private String categoryName;
+    private String receiptUrl;
 	
 }
