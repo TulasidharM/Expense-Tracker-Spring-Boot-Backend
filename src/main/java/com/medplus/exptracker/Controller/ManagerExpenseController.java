@@ -81,12 +81,7 @@ public class ManagerExpenseController {
 //Vardhan validate weather the expense id is mapped to that particular manager or not
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.getUserByUserName(username);
-        Integer managerId = user.getId();
-
-        managerService.approveExpense(id, expense.getRemarks(), managerId);
+        managerService.approveExpense(id, expense.getRemarks());
         var res = new HashMap<String, String>();
         res.put("message", "Expense approved successfully!");
         return ResponseEntity.ok(res);
@@ -94,16 +89,12 @@ public class ManagerExpenseController {
 
     @PutMapping("/{id}/reject")
     public ResponseEntity<Map<String, String>> rejectExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.getUserByUserName(username);
-        Integer managerId = user.getId();
-
-        managerService.rejectExpense(id, expense.getRemarks(), managerId);
+        managerService.rejectExpense(id, expense.getRemarks());
         var res = new HashMap<String, String>();
         res.put("message", "Expense rejected successfully!");
         return ResponseEntity.ok(res);
     }
+
 
     @GetMapping("/approvedAmounts")
     public ResponseEntity<List<Expense>> getApprovedAmounts() {
