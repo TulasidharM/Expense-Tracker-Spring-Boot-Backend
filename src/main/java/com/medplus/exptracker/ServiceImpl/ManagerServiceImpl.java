@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.medplus.exptracker.DTO.ManagerExpenseDTO;
 import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
@@ -36,7 +37,7 @@ public class ManagerServiceImpl implements ManagerService {
     private UserService userService;
 
     @Override
-    public List<Expense> getExpensesByManagerId(Integer managerId) {
+    public List<ManagerExpenseDTO> getExpensesByManagerId(Integer managerId) {
         return managerDAO.findExpensesByManagerId(managerId);
     }
 

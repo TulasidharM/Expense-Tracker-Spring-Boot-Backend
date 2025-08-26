@@ -6,10 +6,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.medplus.exptracker.DTO.ManagerExpenseDTO;
 import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.Dao.ManagerDAO;
 import com.medplus.exptracker.Model.Expense;
-import com.medplus.exptracker.Model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,9 +20,9 @@ public class ManagerDAOImpl implements ManagerDAO{
 	private final JdbcTemplate jdbcTemplate;
 	
 	@Override
-    public List<Expense> findExpensesByManagerId(Integer managerId) {
+    public List<ManagerExpenseDTO> findExpensesByManagerId(Integer managerId) {
         String findByManager = "SELECT * FROM expenses WHERE manager_id = ? AND MONTH(date) = MONTH(CURRENT_DATE)";
-        return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(Expense.class), managerId);
+        return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(ManagerExpenseDTO.class), managerId);
     }
 	
     @Override
@@ -36,5 +36,6 @@ public class ManagerDAOImpl implements ManagerDAO{
 		String fetchAllManagers = "SELECT id,username FROM users WHERE role_id=?";
 		return jdbcTemplate.query(fetchAllManagers,new BeanPropertyRowMapper<>(ManagerForAdminDTO.class),2);
 	}
+
 	
 }

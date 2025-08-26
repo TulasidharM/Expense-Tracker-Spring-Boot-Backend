@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.DTO.ExpenseDTO;
+import com.medplus.exptracker.DTO.ManagerExpenseDTO;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
 import com.medplus.exptracker.Model.Category;
-import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 import com.medplus.exptracker.Service.ExpenseService;
 import com.medplus.exptracker.Service.ManagerService;
@@ -57,14 +57,14 @@ public class ManagerExpenseController {
     //Vardhan: Don't use POJO any where here only use DTO
     
     @GetMapping
-    public ResponseEntity<List<Expense>> getTeamExpenses() {
+    public ResponseEntity<List<ManagerExpenseDTO>> getTeamExpenses() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
 
-        List<Expense> expenses = managerService.getExpensesByManagerId(managerId);
-        List<Expense> enrichedExpenses = expenses.stream().map(expense -> {
+        List<ManagerExpenseDTO> expenses = managerService.getExpensesByManagerId(managerId);
+        List<ManagerExpenseDTO> enrichedExpenses = expenses.stream().map(expense -> {
             var emp = userService.getUserById(expense.getEmployeeId());
             if (emp != null) {
                 expense.setEmployeeName(emp.getUsername());
@@ -80,6 +80,7 @@ public class ManagerExpenseController {
         return ResponseEntity.ok(enrichedExpenses);
     }
 //Vardhan validate weather the expense id is mapped to that particular manager or not
+    
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) throws MonthlyLimitException {
         managerService.approveExpense(id, expense.getRemarks());
@@ -98,13 +99,13 @@ public class ManagerExpenseController {
 
 
     @GetMapping("/approvedAmounts")
-    public ResponseEntity<List<Expense>> getApprovedAmounts() {
+    public ResponseEntity<List<ManagerExpenseDTO>> getApprovedAmounts() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
 
-        List<Expense> approvedExpenses = managerService.getExpensesByManagerId(managerId).stream()
+        List<ManagerExpenseDTO> approvedExpenses = managerService.getExpensesByManagerId(managerId).stream()
                 .filter(exp -> "APPROVED".equals(exp.getStatus()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(approvedExpenses);
@@ -117,7 +118,7 @@ public class ManagerExpenseController {
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
 
-        List<Expense> expenses = managerService.getExpensesByManagerId(managerId);
+        List<ManagerExpenseDTO> expenses = managerService.getExpensesByManagerId(managerId);
         List<String> uniqueEmployees = expenses.stream()
                 .map(expense -> {
                     var emp = userService.getUserById(expense.getEmployeeId());
@@ -144,7 +145,7 @@ public class ManagerExpenseController {
         int currentMonth = now.getMonthValue();
         int currentYear = now.getYear();
 
-        List<Expense> currentMonthApproved = managerService.getExpensesByManagerId(managerId).stream()
+        List<ManagerExpenseDTO> currentMonthApproved = managerService.getExpensesByManagerId(managerId).stream()
                 .filter(exp -> "APPROVED".equals(exp.getStatus()))
                 .filter(exp -> {
                     LocalDate expenseDate = exp.getDate();
@@ -157,7 +158,7 @@ public class ManagerExpenseController {
         List<Category> categories = expenseService.getCategories();
         Map<Integer, Double> categoryAmounts = currentMonthApproved.stream()
                 .collect(Collectors.groupingBy(
-                        Expense::getCategoryId,
+                		ManagerExpenseDTO::getCategoryId,
                         Collectors.summingDouble(expense -> expense.getAmount().doubleValue())
                 ));
 
