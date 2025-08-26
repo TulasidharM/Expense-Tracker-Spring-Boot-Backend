@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.Dao.ManagerDAO;
+import com.medplus.exptracker.Exceptions.MonthlyLimitException;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 import com.medplus.exptracker.Service.EmployeeService;
@@ -40,7 +41,7 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public void approveExpense(Integer id, String remarks) {
+    public void approveExpense(Integer id, String remarks) throws MonthlyLimitException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
@@ -54,15 +55,15 @@ public class ManagerServiceImpl implements ManagerService {
         expense.setRemarks(remarks);
 
         int rowsAffected;
-        Expense expenseToApprove = expenseService.getExpenseById(id);
+        Expense expenseToApprove = expenseService.getExpenseById(id)  ;
         log.info("Trying to approve this expense: " + expenseToApprove);
         if (employeeService.isLimitExceededByCatByEmp(expenseToApprove)) {
             rowsAffected = managerDAO.updateStatus(expense);
         } else {
-            throw new RuntimeException("Unable to approve expense. The limit for the category for the employee has exceeded!.");
+            throw new MonthlyLimitException("Unable to approve expense. The limit for the category for the employee has exceeded!.");
         }
         if (rowsAffected == 0) {
-            throw new RuntimeException("Unable to approve expense. It may not exist or is not in PENDING status.");
+            throw new MonthlyLimitException("Unable to approve expense. It may not exist or is not in PENDING status.");
         }
     }
 
@@ -79,10 +80,10 @@ public class ManagerServiceImpl implements ManagerService {
         
 
         Expense expense = new Expense();
-        expense.setId(id);
-        expense.setRemarks(remarks);
         expense.setStatus("REJECTED");
         expense.setManagerId(managerId);
+        expense.setId(id);
+        expense.setRemarks(remarks);
 
         int rowsAffected = managerDAO.updateStatus(expense);
         if (rowsAffected == 0) {

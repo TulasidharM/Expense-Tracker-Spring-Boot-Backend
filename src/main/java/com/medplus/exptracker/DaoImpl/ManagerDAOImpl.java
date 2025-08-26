@@ -21,7 +21,7 @@ public class ManagerDAOImpl implements ManagerDAO{
 	
 	@Override
     public List<Expense> findExpensesByManagerId(Integer managerId) {
-        String findByManager = "SELECT * FROM expenses WHERE manager_id = ? ORDER BY date DESC";
+        String findByManager = "SELECT * FROM expenses WHERE manager_id = ? AND MONTH(date) = MONTH(CURRENT_DATE)";
         return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(Expense.class), managerId);
     }
 	
