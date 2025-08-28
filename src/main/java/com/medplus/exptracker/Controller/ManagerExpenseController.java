@@ -52,7 +52,6 @@ public class ManagerExpenseController {
                 .collect(Collectors.toMap(Category::getId, Category::getName));
     }
 
-    
     @GetMapping
     public ResponseEntity<List<ManagerExpenseDTO>> getTeamExpenses() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -78,6 +77,7 @@ public class ManagerExpenseController {
     }
     
     //Vardhan validate weather the expense id is mapped to that particular manager or not
+
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) throws MonthlyLimitException {
         managerService.approveExpense(id, expense.getRemarks());
@@ -94,14 +94,12 @@ public class ManagerExpenseController {
         return ResponseEntity.ok(res);
     }
 
-
     @GetMapping("/approvedAmounts")
     public ResponseEntity<List<ManagerExpenseDTO>> getApprovedAmounts() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
-
         List<ManagerExpenseDTO> approvedExpenses = managerService.getExpensesByManagerId(managerId).stream()
                 .filter(exp -> "APPROVED".equals(exp.getStatus()))
                 .collect(Collectors.toList());

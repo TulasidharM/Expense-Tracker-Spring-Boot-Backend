@@ -48,7 +48,6 @@ public class ManagerServiceImpl implements ManagerService {
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
 
-
         Expense expense = new Expense();
         expense.setStatus("APPROVED");
         expense.setManagerId(managerId);
@@ -79,7 +78,6 @@ public class ManagerServiceImpl implements ManagerService {
             throw new RuntimeException("Remark cannot be empty for rejecting an expense");
         }
         
-
         Expense expense = new Expense();
         expense.setStatus("REJECTED");
         expense.setManagerId(managerId);
@@ -91,7 +89,6 @@ public class ManagerServiceImpl implements ManagerService {
             throw new RuntimeException("Unable to reject expense. It may not exist or is not in PENDING status.");
         }
     }
-
 
 	@Override
 	public List<ManagerForAdminDTO> getAllManager() {

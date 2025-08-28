@@ -16,7 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExpenseDTO {
-    private Integer id;
+    
+	private Integer id;
+	
 	@NotNull(message = "Category is required")
     private Integer categoryId;
 
