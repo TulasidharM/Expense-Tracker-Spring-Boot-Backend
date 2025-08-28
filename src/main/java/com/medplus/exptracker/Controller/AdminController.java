@@ -26,12 +26,11 @@ import com.medplus.exptracker.DTO.ExpensePerCategory;
 import com.medplus.exptracker.DTO.FilteredExpenseDTO;
 import com.medplus.exptracker.DTO.ManagerForAdminDTO;
 import com.medplus.exptracker.DTO.RegisterUserDTO;
-import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Model.User;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000/",allowedHeaders = "*",allowCredentials = "true")
 public class AdminController {
 
 	@Autowired
@@ -47,13 +46,14 @@ public class AdminController {
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		
+		//Dasu: cannot create admin validation
 		if(user.getRole_id() == 2) {
 			user.setManager_id(null);
 		} else if(user.getManager_id() == 0 || user.getManager_id() == null) {
 			throw new RuntimeException("You need to assign a manager to the employee");
 		}
 		
+		//Dasu: change to pojo in service
 		User registerUser = new User();
 		BeanUtils.copyProperties(user, registerUser);
 		
@@ -68,7 +68,7 @@ public class AdminController {
     	var result = managerService.getAllManager();
         return result;
     }
-	
+
 	@GetMapping("/expenses")
 	public List<FilteredExpenseDTO> getExpenses(
             @RequestParam(defaultValue = "0") int employeeId,
@@ -88,7 +88,6 @@ public class AdminController {
 	
 	@GetMapping("/get-total-expense")
 	public ResponseEntity<Map<String,BigDecimal>> getTotalExpenseForCurrentMonth(){
-		
 		var res = new HashMap<String,BigDecimal>();
 		res.put("totalExpense",adminService.getExpenseForCurrentMonth());
 		return ResponseEntity.ok(res);

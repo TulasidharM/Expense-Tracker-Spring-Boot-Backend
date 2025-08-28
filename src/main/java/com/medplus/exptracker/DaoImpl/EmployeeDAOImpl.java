@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
 import com.medplus.exptracker.DTO.ExpensePerCategory;
-import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.Dao.EmployeeDAO;
 import com.medplus.exptracker.Model.Expense;
 import com.medplus.exptracker.Util.AuthUtil;
@@ -78,7 +77,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	public BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId, int categoryId,int month, int year) {
 		String expforcatbymon = "SELECT SUM(amount) FROM expenses " +
                 "WHERE employee_id = ? AND category_id = ? " +
-                "AND MONTH(date) = ? AND YEAR(date) = ? AND status != 'REJECTED' AND status != 'PENDING'";
+                "AND MONTH(date) = ? AND YEAR(date) = ? AND status = 'APPROVED'";
 		
 		BigDecimal result =  jdbcTemplate.queryForObject(expforcatbymon, BigDecimal.class, employeeId, categoryId, month, year);
 		if(result == null) {
@@ -87,6 +86,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		return result;
 	}
 
+	
 	@Override
 	public List<ExpensePerCategory> getTotalExpenseForAllCategories(int empId){
 		String TotalExpensesForAllCategories= 

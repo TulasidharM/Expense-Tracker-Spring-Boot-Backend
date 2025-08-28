@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000/",allowedHeaders = "*",allowCredentials = "true")
 public class AuthController {
 	
 	@Autowired
@@ -44,15 +44,23 @@ public class AuthController {
 	public User getUserByUserName() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
-
-		//TODO: set separate service to return user with no password, use a DTO
+        
+  		//TODO: set separate service to return user with no password, use a DTO
 		User user = userService.getUserByUserName(username);
 		log.info("Asked for user details , Sending back user details to store: " + user);
 		user.setPassword("");
 		return user;
 	}
 	
-	
+//	@GetMapping("/logout")
+//	public ResponseEntity<Map<String, String>> logout(){
+//		var res = new HashMap<String,String>();
+//		SecurityContextHolder.clearContext();
+//		res.put("message","Successfully Logged Out");
+//		return ResponseEntity.ok(res);
+//
+//	}
+//	
 	
 	
 }

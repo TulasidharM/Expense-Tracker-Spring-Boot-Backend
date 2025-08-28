@@ -32,11 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/manager/expenses")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000/",allowedHeaders = "*",allowCredentials = "true")
 public class ManagerExpenseController {
 
-	
-	
     @Autowired
     private ExpenseService expenseService;
 
@@ -79,8 +77,7 @@ public class ManagerExpenseController {
         return ResponseEntity.ok(enrichedExpenses);
     }
     
-//Vardhan validate weather the expense id is mapped to that particular manager or not
-    
+    //Vardhan validate weather the expense id is mapped to that particular manager or not
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) throws MonthlyLimitException {
         managerService.approveExpense(id, expense.getRemarks());
