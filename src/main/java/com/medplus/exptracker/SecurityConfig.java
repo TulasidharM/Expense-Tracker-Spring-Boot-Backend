@@ -43,7 +43,6 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 				.requestMatchers("/login").permitAll()
 				.requestMatchers("/logout").permitAll()
-				.requestMatchers("/getuser").authenticated()
 				
 				.requestMatchers("/api/expenses/categories").permitAll()
 				
@@ -72,6 +71,7 @@ public class SecurityConfig {
 	    corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 	    corsConfig.setAllowCredentials(true);
 
+	    
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("/**", corsConfig);
 	    return source;

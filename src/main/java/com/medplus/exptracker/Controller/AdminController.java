@@ -70,7 +70,7 @@ public class AdminController {
     	var result = managerService.getAllManager();
         return result;
     }
-
+	
 	@GetMapping("/expenses")
 	public List<FilteredExpenseDTO> getExpenses(
             @RequestParam(defaultValue = "0") int employeeId,

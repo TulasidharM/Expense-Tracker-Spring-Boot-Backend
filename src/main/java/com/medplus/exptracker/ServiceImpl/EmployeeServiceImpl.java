@@ -1,10 +1,15 @@
 package com.medplus.exptracker.ServiceImpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +28,7 @@ import com.medplus.exptracker.Util.AuthUtil;
 
 
 @Service
+@EnableScheduling
 public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
@@ -31,6 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	ExpenseDAO expenseDAO;
 	@Autowired
 	AuthUtil authUtil;
+	
+	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
 	
 	@Override
     public void createExpense(ExpenseDTO expenseDto) throws MonthlyLimitException {		
@@ -42,11 +51,41 @@ public class EmployeeServiceImpl implements EmployeeService {
 		expense.setManagerId(user.getManager_id());
 		
         
-        if(isLimitExceededByCatByEmp(expense)) {
-        	employeeDAO.save(expense);
-        }else {
-            throw new MonthlyLimitException();
+        if (expense.getCategoryId() == 4) { 
+            LocalDate expenseDate = expense.getDate();
+            LocalDate today = LocalDate.now();
+
+            if (expenseDate.isAfter(today)) {
+            	scheduleExpense(expense,expenseDate);
+            } else {
+            	if (isLimitExceededByCatByEmp(expense)) {
+                    employeeDAO.save(expense);
+                } else {
+                    throw new MonthlyLimitException();
+                }
+            	
+                LocalDate nextScheduledDate = expenseDate.plusDays(30);
+                scheduleExpense(expense,nextScheduledDate);
+            }
+        } else {
+
+            if (isLimitExceededByCatByEmp(expense)) {
+                employeeDAO.save(expense);
+            } else {
+                throw new MonthlyLimitException();
+            }
         }
+    }
+	
+	private void scheduleExpense(Expense expense, LocalDate scheduledDate) {
+        Runnable task = () -> {
+        	Expense newExpense = new Expense();
+            BeanUtils.copyProperties(expense, newExpense);
+            employeeDAO.save(newExpense);
+        };
+        
+        long delay = java.time.Duration.between(LocalDate.now().atStartOfDay(), scheduledDate.atStartOfDay()).toMillis();
+        scheduler.schedule(task, delay, TimeUnit.MILLISECONDS);
     }
 	
 	@Override

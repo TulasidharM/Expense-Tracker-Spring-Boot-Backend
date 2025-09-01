@@ -113,6 +113,7 @@ public class ManagerExpenseController {
         User user = userService.getUserByUserName(username);
         Integer managerId = user.getId();
 
+        //Vardhan:Use difference DTO, Service, DAO for this to get users 
         List<ManagerExpenseDTO> expenses = managerService.getExpensesByManagerId(managerId);
         List<String> uniqueEmployees = expenses.stream()
                 .map(expense -> {
