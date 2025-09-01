@@ -35,9 +35,7 @@ public class UserDAOImpl implements UserDAO{
 										user.getPassword(),
 										user.getRole_id(),
 										user.getManager_id());
-		if(effectedRows == 0 ) {
-			throw new RuntimeException("Could not create new user");
-		}
+		//TODO: Create and throw a custom exception if rows effected is 0
 	}
 	
 	@Override
