@@ -88,9 +88,10 @@ public class EmployeeController {
 		return ResponseEntity.ok(res);
 	}
 	
-	@GetMapping("/get-expense-per-category/{empId}")
-	public List<ExpensePerCategory> getTotalExpenseForCategories(@PathVariable int empId){
+	@GetMapping("/get-expense-per-category")
+	public List<ExpensePerCategory> getTotalExpenseForCategories(){
 		List<ExpensePerCategory> res;
+		int empId = authUtil.getCurrentUser().getId();
 		log.info("Got employee id to get per category amonuts : " +empId);
 		res = employeeService.totalExpenseForCategories(empId);
 		

@@ -46,8 +46,10 @@ public class AdminController {
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		//Dasu: cannot create admin validation
-		if(user.getRole_id() == 2) {
+		if(user.getRole_id()== 1) {
+			throw new RuntimeException("YOU CANNOT CREATE AN ADMIN!");
+		}
+		else if(user.getRole_id() == 2) {
 			user.setManager_id(null);
 		} else if(user.getManager_id() == 0 || user.getManager_id() == null) {
 			throw new RuntimeException("You need to assign a manager to the employee");

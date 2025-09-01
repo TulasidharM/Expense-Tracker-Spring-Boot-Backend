@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import com.medplus.exptracker.Dao.UserDAO;
 import com.medplus.exptracker.Model.User;
 
-
-//TODO: Add first name and last name or something else to have non-unique user details
 @Service
 public class UserService implements UserDetailsService {
     
