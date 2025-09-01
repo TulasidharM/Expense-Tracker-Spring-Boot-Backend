@@ -38,7 +38,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	AuthUtil authUtil;
 	
-	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 	
 	@Override
@@ -54,21 +53,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (expense.getCategoryId() == 4) { 
             LocalDate expenseDate = expense.getDate();
             LocalDate today = LocalDate.now();
-
-            if (expenseDate.isAfter(today)) {
-            	scheduleExpense(expense,expenseDate);
-            } else {
-            	if (isLimitExceededByCatByEmp(expense)) {
-                    employeeDAO.save(expense);
-                } else {
-                    throw new MonthlyLimitException();
-                }
-            	
-                LocalDate nextScheduledDate = expenseDate.plusDays(30);
-                scheduleExpense(expense,nextScheduledDate);
+            
+            //Dasu: Design decision , weather to allow next month dates as well or not , here allowing next month dates aswell
+            if(today.getMonth() != expenseDate.getMonth())
+            {
+            	throw new RuntimeException("Cannot use different month than current one!");
             }
+            
+            employeeDAO.saveScheduledExpense(expense);
         } else {
-
+        	
             if (isLimitExceededByCatByEmp(expense)) {
                 employeeDAO.save(expense);
             } else {
@@ -76,17 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
         }
     }
-	
-	private void scheduleExpense(Expense expense, LocalDate scheduledDate) {
-        Runnable task = () -> {
-        	Expense newExpense = new Expense();
-            BeanUtils.copyProperties(expense, newExpense);
-            employeeDAO.save(newExpense);
-        };
-        
-        long delay = java.time.Duration.between(LocalDate.now().atStartOfDay(), scheduledDate.atStartOfDay()).toMillis();
-        scheduler.schedule(task, delay, TimeUnit.MILLISECONDS);
-    }
+
 	
 	@Override
     public void updateExpense(UpdateExpenseDTO expenseDto) throws MonthlyLimitException,DBException{

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
-	
+
 	@Autowired
     private ExpenseDAO expenseDAO;
 	
@@ -30,5 +30,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense getExpenseById(Integer id) {
         return expenseDAO.findById(id);
     }
+    
+    @Override
+    public List<Expense> getScheduledExpenses(){
+    	return expenseDAO.findScheduledExpenses();
+    }
+
+
+
+	@Override
+	public void updateScheduledExpenseDate(Expense schExp) {
+		expenseDAO.updateScheduledExpenseDate(schExp);
+	}
     
 }

@@ -15,4 +15,5 @@ public interface EmployeeDAO {
 	 
 	 public BigDecimal getTotalExpenseByCategoryByEmployee(int employeeId, int categoryId,int month, int year);
 	 List<ExpensePerCategory> getTotalExpenseForAllCategories(int empId);
+	 void saveScheduledExpense(Expense scheduledExpense);
 }

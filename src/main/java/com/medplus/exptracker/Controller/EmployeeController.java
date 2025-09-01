@@ -1,5 +1,6 @@
 package com.medplus.exptracker.Controller;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,20 @@ public class EmployeeController {
     public ResponseEntity<Map<String,String>> createExpense(@Valid @RequestBody ExpenseDTO expense) throws MonthlyLimitException {
         log.info("Creating expense: " + expense);
         
+        LocalDate today = LocalDate.now();
+        if(expense.getCategoryId() != 4) {
+        	if(today.isBefore(expense.getDate())) {
+            	throw new RuntimeException("Date cannot be in the future");
+            }
+        }
+        
         employeeService.createExpense(expense);
         
         var res = new HashMap<String,String>();
         res.put("message", "Expense Created Succesfully!");
         return ResponseEntity.ok(res);
     }
-
+	
 	@GetMapping("/get-expenses")
     public ResponseEntity<List<ExpenseForEmployeeDTO>> getExpensesForEmployee() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

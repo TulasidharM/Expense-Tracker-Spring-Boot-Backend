@@ -10,4 +10,6 @@ public interface ExpenseDAO {
 	Expense findById(Integer id);
 	List<Category> findAllCategories();
 	BigDecimal findMaxExpenseForCategory(int categoryId);
+	List<Expense> findScheduledExpenses();
+	void updateScheduledExpenseDate(Expense schExp);
 }

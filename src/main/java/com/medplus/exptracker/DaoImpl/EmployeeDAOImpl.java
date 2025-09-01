@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.medplus.exptracker.DTO.ExpenseForEmployeeDTO;
@@ -22,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class EmployeeDAOImpl implements EmployeeDAO{
 	private final JdbcTemplate jdbcTemplate;
-	
+	private final NamedParameterJdbcTemplate namedJdbcTemplate;
 	@Autowired
 	private AuthUtil authUtil;
 	@Override
@@ -102,4 +105,35 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		return result;
 	}
 	
+	@Override
+	public void saveScheduledExpense(Expense scheduledExpense) {
+		String SaveScheduledExpense = """
+				INSERT INTO scheduled_expenses(
+								employee_id,
+								category_id,
+								amount,
+								description,
+								date,
+								manager_id,
+								remarks,
+								receipt_url) 
+				VALUES(
+						:employeeId,
+						:categoryId,
+						:amount,
+						:description,
+						:date,
+						:managerId,
+						:remarks, 
+						:receiptUrl
+					)
+				""";
+		
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(scheduledExpense);
+		int rowsEffected = namedJdbcTemplate.update(SaveScheduledExpense,parameters);
+		
+		if(rowsEffected == 0) {
+			throw new RuntimeException("Could not add scheduled Expense....");
+		}
+	}
 }

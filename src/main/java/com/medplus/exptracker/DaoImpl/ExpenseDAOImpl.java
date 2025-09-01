@@ -1,6 +1,7 @@
 package com.medplus.exptracker.DaoImpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -36,4 +37,40 @@ public class ExpenseDAOImpl implements ExpenseDAO {
     	String getMaxForCategory = "SELECT monthly_limit FROM categories WHERE id = ?";
     	return jdbcTemplate.queryForObject(getMaxForCategory, BigDecimal.class,categoryId);
     }
+
+	@Override
+	public List<Expense> findScheduledExpenses() {
+		String getAllSchExpenses = """
+				SELECT 
+					id,
+					employee_id as employeeId,
+					category_id as categoryId,
+					amount,
+					description,
+					date,
+					status,
+					manager_id as managerId,
+					remarks,
+					receipt_url as receiptUrl
+				FROM scheduled_expenses;
+				""";
+		
+		return jdbcTemplate.query(getAllSchExpenses, new BeanPropertyRowMapper<>(Expense.class));
+	}
+
+	@Override
+	public void updateScheduledExpenseDate(Expense schExp) {
+		String updateDateOfSchExpense = """
+				UPDATE scheduled_expenses SET date=?
+				""";
+		
+		LocalDate nextDate = schExp.getDate().plusMonths(1);
+		
+		int effectedRows = jdbcTemplate.update(updateDateOfSchExpense,nextDate);
+		
+		if(effectedRows == 0 ) {
+			throw new RuntimeException("Could not update the date of Scheduled Expense");
+		}
+	}
+    
 }

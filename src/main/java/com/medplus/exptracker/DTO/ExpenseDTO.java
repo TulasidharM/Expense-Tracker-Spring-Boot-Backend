@@ -22,7 +22,7 @@ public class ExpenseDTO {
 	@NotNull(message = "Category is required")
     private Integer categoryId;
 
-	@PastOrPresent(message="Date must be today or past dates")
+	
     private LocalDate date;
 
 
