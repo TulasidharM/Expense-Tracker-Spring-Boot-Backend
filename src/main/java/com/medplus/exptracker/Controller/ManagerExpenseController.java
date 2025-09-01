@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.medplus.exptracker.DTO.ExpenseDTO;
 import com.medplus.exptracker.DTO.ManagerExpenseDTO;
+import com.medplus.exptracker.DTO.UserDTO;
 import com.medplus.exptracker.Exceptions.MonthlyLimitException;
 import com.medplus.exptracker.Model.Category;
 import com.medplus.exptracker.Model.User;
@@ -106,30 +107,6 @@ public class ManagerExpenseController {
         return ResponseEntity.ok(approvedExpenses);
     }
 
-    @GetMapping("/employeeList")
-    public ResponseEntity<Map<String, Object>> getEmployeeList() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.getUserByUserName(username);
-        Integer managerId = user.getId();
-
-        //Vardhan:Use difference DTO, Service, DAO for this to get users 
-        List<ManagerExpenseDTO> expenses = managerService.getExpensesByManagerId(managerId);
-        List<String> uniqueEmployees = expenses.stream()
-                .map(expense -> {
-                    var emp = userService.getUserById(expense.getEmployeeId());
-                    return emp != null ? emp.getUsername() : "Unknown Employee";
-                })
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("employees", uniqueEmployees);
-        response.put("totalCount", uniqueEmployees.size());
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/categoryWiseApproved")
     public ResponseEntity<List<Map<String, Object>>> getCategoryWiseApproved() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -174,4 +151,25 @@ public class ManagerExpenseController {
 
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/employees")
+    public ResponseEntity<Map<String, Object>> getEmployeesUnderManager() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User manager = userService.getUserByUserName(username);
+        Integer managerId = manager.getId();
+        List<UserDTO> employees = userService.getEmployeesByManagerId(managerId);
+
+        List<String> employeeUsernames = employees.stream()
+            .map(UserDTO::getUsername)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("employees", employeeUsernames);
+        response.put("totalCount", employeeUsernames.size());
+        return ResponseEntity.ok(response);
+    }
+
 }

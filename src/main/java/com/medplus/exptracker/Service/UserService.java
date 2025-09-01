@@ -1,6 +1,8 @@
 package com.medplus.exptracker.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.medplus.exptracker.Dao.UserDAO;
+import com.medplus.exptracker.DTO.UserDTO;
 import com.medplus.exptracker.Model.User;
 
 @Service
@@ -56,5 +59,17 @@ public class UserService implements UserDetailsService {
     
     public void addUser(User user) {
     	userDAO.addUser(user);
+    }
+    
+    public List<UserDTO> getEmployeesByManagerId(Integer managerId) {
+        List<User> users = userDAO.getUsersByManagerId(managerId);
+        return users.stream().map(user -> {
+            UserDTO dto = new UserDTO();
+            dto.setId(user.getId());
+            dto.setUsername(user.getUsername());
+            dto.setRoleId(user.getRole_id());
+            dto.setManagerId(user.getManager_id());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

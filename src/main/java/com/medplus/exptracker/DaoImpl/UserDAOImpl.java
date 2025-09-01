@@ -1,5 +1,6 @@
 package com.medplus.exptracker.DaoImpl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class UserDAOImpl implements UserDAO{
 		User user= jdbcTemplate.queryForObject(getUserByIdSql, new BeanPropertyRowMapper<>(User.class), userId);
 		return Optional.ofNullable(user);
 	}
+	
+	@Override
+	public List<User> getUsersByManagerId(Integer managerId) {
+        String sql = "SELECT * FROM users WHERE manager_id = ?";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), managerId);
+    }
 	
 	
 }
