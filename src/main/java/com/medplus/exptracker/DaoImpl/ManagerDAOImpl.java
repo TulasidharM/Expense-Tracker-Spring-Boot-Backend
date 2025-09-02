@@ -21,7 +21,7 @@ public class ManagerDAOImpl implements ManagerDAO{
 	
 	@Override
     public List<ManagerExpenseDTO> findExpensesByManagerId(Integer managerId) {
-        String findByManager = "SELECT id,employee_id,category_id,amount,description,date,status,remarks,receipt_url FROM expenses WHERE manager_id = ? AND MONTH(date) = MONTH(CURRENT_DATE)";
+        String findByManager = "SELECT id, employee_id, category_id, amount, description, date, status, remarks, receipt_url FROM expenses WHERE manager_id = ?";
         return jdbcTemplate.query(findByManager, new BeanPropertyRowMapper<>(ManagerExpenseDTO.class), managerId);
     }
 	
@@ -33,7 +33,7 @@ public class ManagerDAOImpl implements ManagerDAO{
 
 	@Override
 	public List<ManagerForAdminDTO> fetchAllManagers() {
-		String fetchAllManagers = "SELECT id,username FROM users WHERE role_id=?";
+		String fetchAllManagers = "SELECT id, username FROM users WHERE role_id=?";
 		return jdbcTemplate.query(fetchAllManagers,new BeanPropertyRowMapper<>(ManagerForAdminDTO.class),2);
 	}
 

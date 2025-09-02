@@ -23,7 +23,7 @@ public class UserDAOImpl implements UserDAO{
 	@Override
 	public Optional<User> findByUsername(String username) {
 		User user = new User();
-		String getUserSql = "SELECT * FROM users WHERE username = ? LIMIT 1";
+		String getUserSql = "SELECT id, username, password, role_id, manager_id FROM users WHERE username = ? LIMIT 1";
 		user= jdbcTemplate.queryForObject(getUserSql, new BeanPropertyRowMapper<>(User.class), username);
 		return Optional.ofNullable(user);
 	}
@@ -43,14 +43,14 @@ public class UserDAOImpl implements UserDAO{
 	
 	@Override
 	public Optional<User> getUserById(Integer userId) {
-		String getUserByIdSql = "SELECT * FROM users WHERE id = ?";
+		String getUserByIdSql = "SELECT id, username, password, role_id, manager_id FROM users WHERE id = ?";
 		User user= jdbcTemplate.queryForObject(getUserByIdSql, new BeanPropertyRowMapper<>(User.class), userId);
 		return Optional.ofNullable(user);
 	}
 	
 	@Override
 	public List<User> getUsersByManagerId(Integer managerId) {
-        String sql = "SELECT * FROM users WHERE manager_id = ?";
+        String sql = "SELECT id, username, password, role_id, manager_id FROM users WHERE manager_id = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), managerId);
     }
 	

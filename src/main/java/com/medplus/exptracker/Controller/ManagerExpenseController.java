@@ -77,7 +77,6 @@ public class ManagerExpenseController {
         return ResponseEntity.ok(enrichedExpenses);
     }
     
-    //Vardhan validate weather the expense id is mapped to that particular manager or not
 
     @PutMapping("/{id}/approve")
     public ResponseEntity<Map<String, String>> approveExpense(@PathVariable Integer id, @RequestBody ExpenseDTO expense) throws MonthlyLimitException {
